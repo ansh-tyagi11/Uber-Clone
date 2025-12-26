@@ -9,7 +9,7 @@ export default function Footer() {
                         <div className="col-span-2 lg:col-span-2">
                             <div className="flex items-center gap-2 text-[#000000]  mb-6">
                                 <span className="material-symbols-outlined text-3xl text-[#0d59f2]">local_taxi</span>
-                                <span className="text-xl font-display font-bold">Uber Clone</span>
+                                <span className="text-xl font-display font-bold">RideApp</span>
                             </div>
                             <p className="text-[#6a6a6a]  max-w-xs mb-6">
                                 Moving people, and the world, forward.
@@ -73,7 +73,7 @@ export default function Footer() {
                     <div
                         className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-[#e0e0e0] text-xs text-[#6a6a6a] ">
                         <div className="mb-4 md:mb-0">
-                            © 2023 Uber Clone Technologies Inc.
+                            © 2023 RideApp Technologies Inc.
                         </div>
                         <div className="flex gap-6">
                             <a className="hover:text-[#000000] " href="#">Privacy</a>

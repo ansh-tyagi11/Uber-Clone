@@ -9,7 +9,7 @@ export default function Navbar() {
                         <div className="w-8 h-8 text-blue-600">
                             <span className="material-symbols-outlined text-4xl">local_taxi</span>
                         </div>
-                        <h2 className="text-xl font-bold">Uber Clone</h2>
+                        <h2 className="text-xl font-bold">RideApp</h2>
                     </div>
                     <div className="hidden md:flex flex-1 justify-end gap-8 items-center">
                         <div className="flex items-center gap-6">
