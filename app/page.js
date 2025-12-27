@@ -128,7 +128,6 @@ export default function Home() {
                     <h4 className="text-lg font-bold font-display text-[#000000] ">Standard</h4>
                     <p className="text-sm text-[#6a6a6a] ">Affordable everyday rides</p>
                   </div>
-                  <span className="text-[#000000]  font-medium">$</span>
                 </div>
               </div>
               <div className="min-w-70 md:min-w-[320px] snap-center">
@@ -146,7 +145,6 @@ export default function Home() {
                     <h4 className="text-lg font-bold font-display text-[#000000] ">Premium</h4>
                     <p className="text-sm text-[#6a6a6a] ">High-end cars for comfort</p>
                   </div>
-                  <span className="text-[#000000]  font-medium">$$$</span>
                 </div>
               </div>
               <div className="min-w-70 md:min-w-[320px] snap-center">
@@ -166,7 +164,6 @@ export default function Home() {
                     <h4 className="text-lg font-bold font-display text-[#000000] ">Green</h4>
                     <p className="text-sm text-[#6a6a6a] ">Sustainable electric rides</p>
                   </div>
-                  <span className="text-[#000000]  font-medium">$$</span>
                 </div>
               </div>
               <div className="min-w-70 md:min-w-[320px] snap-center">
@@ -184,7 +181,6 @@ export default function Home() {
                     <h4 className="text-lg font-bold font-display text-[#000000] ">XL</h4>
                     <p className="text-sm text-[#6a6a6a] ">High-capacity for groups</p>
                   </div>
-                  <span className="text-[#000000]  font-medium">$$$$</span>
                 </div>
               </div>
             </div>

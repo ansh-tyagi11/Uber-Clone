@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import Link from 'next/link';
 
 export default function Navbar() {
     return (
@@ -14,16 +15,16 @@ export default function Navbar() {
                     <div className="hidden md:flex flex-1 justify-end gap-8 items-center">
                         <div className="flex items-center gap-6">
                             <a className="text-sm font-medium hover:text-blue-600 transition-colors" href="#">Ride</a>
-                            <a className="text-sm font-medium hover:text-blue-600 transition-colors" href="#">Drive</a>
-                            <a className="text-sm font-medium hover:text-blue-600 transition-colors" href="#">Business</a>
-                            <a className="text-sm font-medium hover:text-blue-600 transition-colors" href="#">About</a>
+                            <a className="text-sm font-medium hover:text-blue-600 transition-colors" href="/">Home</a>
+                            <a className="text-sm font-medium hover:text-blue-600 transition-colors" href="/about">About</a>
+                            <a className="text-sm font-medium hover:text-blue-600 transition-colors" href="/contact">Contact</a>
                         </div>
                         <div className="flex gap-3">
                             <button className="flex items-center justify-center rounded-lg h-9 px-4 bg-transparent border border-gray-200 text-sm font-bold hover:bg-gray-100 transition-colors">
-                                Log in
+                                <Link href="/login">Log in</Link>
                             </button>
                             <button className="flex items-center justify-center rounded-lg h-9 px-4 bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition-colors">
-                                Sign up
+                                <Link href="/signup">Sign up</Link>
                             </button>
                         </div>
                     </div>
