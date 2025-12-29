@@ -1,7 +1,11 @@
+"use client"
 import React from "react";
 import Link from "next/link";
+import { useSession, signIn } from "next-auth/react";
 
 export default function signup() {
+    const { data: session, status } = useSession();
+
     return (
         <>
             <div className="font-display text-[#111318] dark:text-white bg-[#f5f6f8] dark:bg-[#101622] antialiased overflow-x-hidden">
@@ -116,8 +120,8 @@ export default function signup() {
                                     <div className="grow border-t border-[#dbdfe6] dark:border-gray-700"></div>
                                 </div>
                                 {/* Social Buttons */}
-                                <div className="grid grid-cols-3 gap-3 mb-6">
-                                    <button className="flex items-center justify-center h-12 rounded-lg border border-[#dbdfe6] dark:border-gray-600 hover:bg-[#f5f6f8] dark:hover:bg-gray-700 transition-colors bg-white dark:bg-[#2d3748]">
+                                <div className="grid grid-cols-2 gap-3 mb-6">
+                                    <button onClick={() => signIn("google")} className="flex items-center justify-center h-12 rounded-lg border border-[#dbdfe6] dark:border-gray-600 hover:bg-[#f5f6f8] dark:hover:bg-gray-700 transition-colors bg-white dark:bg-[#2d3748]">
                                         {/* Google Icon SVG */}
                                         <svg className="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -134,24 +138,10 @@ export default function signup() {
                                                 fill="#EA4335"></path>
                                         </svg>
                                     </button>
-                                    <button className="flex items-center justify-center h-12 rounded-lg border border-[#dbdfe6] dark:border-gray-600 hover:bg-[#f5f6f8] dark:hover:bg-gray-700 transition-colors bg-white dark:bg-[#2d3748]">
-                                        {/* Apple Icon SVG */}
-                                        <svg className="w-5 h-5 dark:fill-white fill-black" viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M12 2C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10c0-5.523-4.477-10-10-10zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm.5-5.5h-1v-4h1v4zm0-6h-1v-1h1v1z"
-                                                fill="none" fillRule="nonzero"></path>
-                                            <path
-                                                d="M16.634 13.628c-.126-2.126 1.742-3.149 1.821-3.19-1.002-1.458-2.548-1.656-3.095-1.68-1.309-.133-2.56.768-3.219.768-.669 0-1.696-.749-2.793-.73-1.438.02-2.775.836-3.504 2.124-1.5 2.584-.383 6.408 1.065 8.504.708 1.037 1.554 2.179 2.658 2.138 1.066-.043 1.469-.691 2.76-.691 1.289 0 1.652.691 2.779.67 1.147-.021 1.875-1.045 2.576-2.094.809-1.18 1.141-2.32 1.156-2.38-.026-.01-2.227-.852-2.204-3.44zM14.944 6.903c.591-.715.989-1.706.88-2.695-.851.034-1.88.567-2.488 1.282-.544.629-.997 1.637-.872 2.61.949.073 1.916-.475 2.48-1.197z">
-                                            </path>
-                                        </svg>
-                                    </button>
-                                    <button className="flex items-center justify-center h-12 rounded-lg border border-[#dbdfe6] dark:border-gray-600 hover:bg-[#f5f6f8] dark:hover:bg-gray-700 transition-colors bg-white dark:bg-[#2d3748]">
-                                        {/* Facebook Icon SVG */}
-                                        <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z">
-                                            </path>
+                                    <button onClick={() => signIn("github")} className="flex items-center justify-center h-12 rounded-lg border border-[#dbdfe6] dark:border-gray-600 hover:bg-[#f5f6f8] dark:hover:bg-gray-700 transition-colors bg-white dark:bg-[#2d3748]">
+                                        {/* GitHub Icon SVG */}
+                                        <svg className="w-5 h-5 dark:fill-white fill-black" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path fillRule="evenodd" clipRule="evenodd" d="M12 0C5.372 0 0 5.372 0 12c0 5.303 3.438 9.8 8.205 11.387.6.113.82-.26.82-.577 0-.285-.01-1.04-.015-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.085 1.84 1.237 1.84 1.237 1.07 1.835 2.809 1.305 3.495.997.108-.774.418-1.305.762-1.605-2.665-.303-5.466-1.332-5.466-5.931 0-1.31.468-2.381 1.235-3.221-.123-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23a11.51 11.51 0 0 1 3-.404c1.02.005 2.045.138 3 .404 2.289-1.552 3.295-1.23 3.295-1.23.653 1.653.242 2.873.12 3.176.77.84 1.232 1.911 1.232 3.221 0 4.609-2.807 5.625-5.48 5.921.43.371.813 1.102.813 2.222 0 1.606-.015 2.896-.015 3.287 0 .32.216.694.825.576C20.565 21.796 24 17.3 24 12c0-6.628-5.372-12-12-12z" />
                                         </svg>
                                     </button>
                                 </div>

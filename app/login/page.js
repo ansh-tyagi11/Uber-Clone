@@ -1,6 +1,11 @@
-import React from 'react'
+"use client";
+import React from 'react';
+import { useSession, signIn } from 'next-auth/react';
 
 export default function Login() {
+    const { data: session, status } = useSession();
+
+
     return (
         <>
             <main className="relative min-h-screen flex items-center justify-center pt-20 pb-10 px-4">
@@ -68,8 +73,8 @@ export default function Login() {
                                 <span className="shrink-0 mx-4 text-gray-400 text-xs uppercase font-medium tracking-wider">Or continue with</span>
                                 <div className="grow border-t border-gray-200 dark:border-gray-700"></div>
                             </div>
-                            <div className="grid grid-cols-3 gap-3">
-                                <button className="h-12 flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#101622] hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                            <div className="grid grid-cols-2 gap-3">
+                                <button onClick={() => signIn("google")} className="h-12 flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#101622] hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M23.766 12.2764C23.766 11.4607 23.6999 10.6406 23.5588 9.83807H12.24V14.4591H18.7217C18.4528 15.9494 17.5885 17.2678 16.323 18.1056V21.1039H20.19C22.4608 19.0139 23.766 15.9274 23.766 12.2764Z" fill="#4285F4"></path>
                                         <path d="M12.24 24.0008C15.4765 24.0008 18.2058 22.9382 20.1945 21.1039L16.3275 18.1055C15.2517 18.8375 13.8627 19.252 12.2445 19.252C9.11388 19.252 6.45946 17.1399 5.50705 14.3003H1.5166V17.3912C3.55371 21.4434 7.7029 24.0008 12.24 24.0008Z" fill="#34A853"></path>
@@ -77,15 +82,9 @@ export default function Login() {
                                         <path d="M12.24 4.74966C13.9509 4.7232 15.6044 5.36697 16.8434 6.54867L20.2695 3.12262C18.1001 1.0855 15.2208 -0.034466 12.24 0.000808666C7.7029 0.000808666 3.55371 2.55822 1.5166 6.61049L5.50253 9.70143C6.45064 6.86173 9.10947 4.74966 12.24 4.74966Z" fill="#EA4335"></path>
                                     </svg>
                                 </button>
-                                <button className="h-12 flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#101622] hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                <button onClick={() => signIn("github")} className="h-12 flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#101622] hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                                     <svg className="w-6 h-6 text-black dark:text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M13.2 11.45V11.45L13.2 11.45ZM13.2 11.45L13.2 11.45ZM13.2 11.45L13.2 11.45Z"></path>
-                                        <path d="M16.99 8.019C15.619 8.019 15.059 8.979 15.059 8.979V8.149H12.609V16H15.059V11.979C15.059 10.919 15.259 9.879 16.549 9.879C17.829 9.879 17.849 11.079 17.849 12.049V16H20.299V11.669C20.299 9.539 19.839 7.919 18.069 7.919C17.219 7.919 16.639 8.309 16.329 8.799L16.299 8.799L16.299 8.799L16.299 8.019H16.99ZM11.379 6.849C12.229 6.849 12.929 6.169 12.929 5.309C12.929 4.459 12.239 3.769 11.379 3.769C10.519 3.769 9.839 4.459 9.839 5.309C9.839 6.169 10.529 6.849 11.379 6.849ZM12.609 16H10.159V8.149H12.609V16ZM7.709 16H5.259V8.149H7.709V16ZM4.899 16.5H22.149C22.689 16.5 23.149 16.049 23.149 15.499V4.509C23.149 3.969 22.699 3.509 22.149 3.509H4.899C4.349 3.509 3.899 3.969 3.899 4.509V15.499C3.899 16.049 4.349 16.5 4.899 16.5Z"></path>
-                                    </svg>
-                                </button>
-                                <button className="h-12 flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#101622] hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                                    <svg className="w-6 h-6 text-black dark:text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M17.05 20.28c-.98.95-2.05.88-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.48 2.24-1.26 3.63-1.24 1.52.05 2.67.77 3.35 1.73-3.25 1.73-2.72 5.76.32 7.01-.26.8-.57 1.56-1.02 2.28-.6.96-1.28 1.96-2.36 2.39h-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"></path>
+                                        <path fillRule="evenodd" clipRule="evenodd" d="M12 0C5.372 0 0 5.372 0 12c0 5.303 3.438 9.8 8.205 11.387.6.113.82-.26.82-.577 0-.285-.01-1.04-.015-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.085 1.84 1.237 1.84 1.237 1.07 1.835 2.809 1.305 3.495.997.108-.774.418-1.305.762-1.605-2.665-.303-5.466-1.332-5.466-5.931 0-1.31.468-2.381 1.235-3.221-.123-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23a11.51 11.51 0 0 1 3-.404c1.02.005 2.045.138 3 .404 2.289-1.552 3.295-1.23 3.295-1.23.653 1.653.242 2.873.12 3.176.77.84 1.232 1.911 1.232 3.221 0 4.609-2.807 5.625-5.48 5.921.43.371.813 1.102.813 2.222 0 1.606-.015 2.896-.015 3.287 0 .32.216.694.825.576C20.565 21.796 24 17.3 24 12c0-6.628-5.372-12-12-12z" />
                                     </svg>
                                 </button>
                             </div>
