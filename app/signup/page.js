@@ -2,9 +2,30 @@
 import React from "react";
 import Link from "next/link";
 import { useSession, signIn } from "next-auth/react";
+import { useForm } from 'react-hook-form';
+import { createUser } from "@/actions/useractions";
+import { toast } from "react-toastify";
 
-export default function signup() {
+export default function Signup() {
     const { data: session, status } = useSession();
+    const {
+        register,
+        handleSubmit,
+        reset,
+        watch,
+        formState: { errors, isSubmitting },
+    } = useForm();
+
+    const password = watch("password");
+
+    const onSubmit = async (data) => {
+        let res = await createUser(data)
+
+        if(res.success) return toast.message("User Created.")
+        let a = await data;
+        console.log(a)
+        reset();
+    }
 
     return (
         <>
@@ -33,7 +54,7 @@ export default function signup() {
                             </div>
                             {/* Form Section */}
                             <div className="p-8 pt-6">
-                                <form className="flex flex-col gap-5">
+                                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
                                     {/* Full Name Field */}
                                     <div className="flex flex-col gap-2">
                                         <label className="text-sm font-semibold text-[#111318] dark:text-gray-200" >
@@ -45,9 +66,15 @@ export default function signup() {
                                                 placeholder="Enter your full name"
                                                 required
                                                 type="text"
-                                                name="name"
                                                 autoComplete="name"
+                                                {...register("username", {
+                                                    required: { value: true, message: "This field is required." }, pattern: {
+                                                        value: /^[A-Za-z ]+$/,
+                                                        message: "Only letters are allowed (A-Z,a-z)",
+                                                    },
+                                                })} name="username"
                                             />
+                                            {errors.username && <div className="text-xs text-red-500 dark:text-red-500">{errors.username.message}</div>}
                                             <span
                                                 className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[20px]">person</span>
                                         </div>
@@ -61,11 +88,11 @@ export default function signup() {
                                             <input
                                                 className="w-full h-12 rounded-lg border border-[#dbdfe6] dark:border-gray-600 bg-white dark:bg-[#2d3748] px-4 text-base text-[#111318] dark:text-white placeholder:text-[#9ca3af] focus:border-[#256af4] focus:ring-2 focus:ring-[#256af4]/20 transition-all outline-none"
                                                 placeholder="name@example.com"
-                                                required
-                                                type="text"
-                                                name="email"
+                                                type="email"
                                                 autoComplete="email"
+                                                {...register("email", { required: { value: true, message: "This field is required." }, name: "email" })}
                                             />
+                                            {errors.email && <div className="text-xs text-red-500 dark:text-red-500">{errors.email.message}</div>}
                                             <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[20px]">mail</span>
                                         </div>
                                     </div>
@@ -76,17 +103,24 @@ export default function signup() {
                                         </label>
                                         <div className="relative group">
                                             <input
-                                                className="w-full h-12 rounded-lg border border-[#dbdfe6] dark:border-gray-600 bg-white dark:bg-[#2d3748] px-4 text-base text-[#111318] dark:text-white placeholder:text-[#9ca3af] focus:border-[#256af4] focus:ring-2 focus:ring-[#256af4]/20 transition-all outline-none pr-12"
+                                                className="w-full h-12 rounded-lg border border-[#dbdfe6] dark:border-gray-600 bg-white dark:bg-[#2d3748] px-4 text-base text-[#111318] dark:text-white placeholder:text-[#9ca3af] focus:border-[#256af4] focus:ring-2 focus:ring-[#256af4]/20 transition-all outline-none"
                                                 placeholder="Create a password"
-                                                required
                                                 type="password"
                                                 autoComplete="password"
-                                                name="password"
+                                                {...register("password", {
+                                                    required: "This field is required.",
+                                                    minLength: {
+                                                        value: 8,
+                                                        message: "Password must be at least 8 characters",
+                                                    },
+                                                    pattern: {
+                                                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/,
+                                                        message: "Password must contain A-Z, a-z, number, symbol & no spaces.",
+                                                    },
+                                                })}
+
                                             />
-                                            <button className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 focus:outline-none"
-                                                type="button">
-                                                <span className="material-symbols-outlined text-[20px]">visibility_off</span>
-                                            </button>
+                                            {errors.password && <div className="text-xs text-red-500 dark:text-red-500">{errors.password.message}</div>}
                                         </div>
                                         <p className="text-xs text-[#606e8a] dark:text-gray-500 mt-1">Must be at least 8 characters long
                                         </p>
@@ -100,15 +134,20 @@ export default function signup() {
                                             <input
                                                 className="w-full h-12 rounded-lg border border-[#dbdfe6] dark:border-gray-600 bg-white dark:bg-[#2d3748] px-4 text-base text-[#111318] dark:text-white placeholder:text-[#9ca3af] focus:border-[#256af4] focus:ring-2 focus:ring-[#256af4]/20 transition-all outline-none"
                                                 placeholder="Confirm your password"
-                                                required
-                                                name="confirmPassword"
                                                 autoComplete="password"
-                                                type="password" />
+                                                type="password"
+                                                {...register("confirmPassword", {
+                                                    required: "Confirm password is required",
+                                                    validate: value =>
+                                                        value === password || "Passwords do not match."
+                                                })}
+                                            />
                                         </div>
+                                        {errors.confirmPassword && <div className="text-xs text-red-500 dark:text-red-500">{errors.confirmPassword.message}</div>}
                                     </div>
                                     {/* Submit Button */}
-                                    <button className="mt-2 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-[#256af4] hover:bg-[#256af4]/90 text-white text-base font-bold leading-normal tracking-[0.015em] shadow-md transition-colors duration-200"
-                                        type="submit">
+                                    <button disabled={isSubmitting} className={`mt-2 flex w-full items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-[#256af4] hover:bg-[#256af4]/90 text-white text-base font-bold leading-normal tracking-[0.015em] shadow-md transition-colors duration-200 ${isSubmitting ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
+                                        type="submit" value="submit">
                                         Sign Up
                                     </button>
                                 </form>

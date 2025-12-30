@@ -1,10 +1,21 @@
 "use client";
 import React from 'react';
 import { useSession, signIn } from 'next-auth/react';
+import { useForm } from 'react-hook-form';
 
 export default function Login() {
     const { data: session, status } = useSession();
+    const { register,
+        handleSubmit,
+        reset,
+        formState: { errors, isSubmitting }
+    } = useForm()
 
+    const onSubmit = async (data) => {
+        let a = await data;
+        console.log(a)
+        reset();
+    }
 
     return (
         <>
@@ -27,7 +38,7 @@ export default function Login() {
                             <p className="text-gray-500 dark:text-gray-400 text-sm">Please enter your details to Login.</p>
                         </div>
                         <div className="px-8 pb-8">
-                            <form className="flex flex-col gap-5">
+                            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
                                 <div className="flex flex-col gap-1.5">
                                     <label className="text-[#0d121c] dark:text-gray-200 text-sm font-semibold">
                                         Email or Mobile Number
@@ -36,11 +47,11 @@ export default function Login() {
                                         <input
                                             className="w-full h-12 px-4 rounded-lg bg-gray-50 dark:bg-[#101622] border border-gray-200 dark:border-gray-700 text-[#0d121c] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#0d59f2]/20 focus:border-[#0d59f2] transition-all placeholder:text-gray-400 text-base"
                                             placeholder="Enter your email"
-                                            name='email'
                                             type="email"
                                             autoComplete='email'
-                                            required
+                                            {...register("email", { required: "This field is required" })}
                                         />
+                                        {errors.email && <div className="text-xs text-red-500 dark:text-red-500">{errors.email.message}</div>}
                                         <span className="material-symbols-outlined absolute right-4 top-3 text-gray-400 pointer-events-none text-[20px]">mail</span>
                                     </div>
                                 </div>
@@ -54,16 +65,20 @@ export default function Login() {
                                     <div className="relative">
                                         <input
                                             className="w-full h-12 px-4 rounded-lg bg-gray-50 dark:bg-[#101622] border border-gray-200 dark:border-gray-700 text-[#0d121c] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#0d59f2]/20 focus:border-[#0d59f2] transition-all placeholder:text-gray-400 text-base"
-                                            name='password'
                                             placeholder="Enter your password"
                                             type="password"
                                             autoComplete='password'
-                                            required
+                                            {...register("password", {
+                                                required: "This field is requird.", minLength: { value: 8, message: "Password must be at least 8 characters", }, pattern: {
+                                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/,
+                                                    message: "Password must contain A-Z, a-z, number, symbol & no spaces."
+                                                }
+                                            })}
                                         />
-                                        <span className="material-symbols-outlined absolute right-4 top-3 text-gray-400 cursor-pointer hover:text-gray-600 text-[20px]">visibility_off</span>
+                                        {errors.password && <div className="text-xs text-red-500 dark:text-red-500">{errors.password.message}</div>}
                                     </div>
                                 </div>
-                                <button className="w-full h-12 mt-2 bg-[#0d59f2] hover:bg-[#0b4ecf] text-white font-bold rounded-lg transition-all shadow-lg shadow-[#0d59f2]/30 flex items-center justify-center gap-2">
+                                <button disabled={isSubmitting} type="submit" value="submit" className={`w-full h-12 mt-2 bg-[#0d59f2] hover:bg-[#0b4ecf] text-white font-bold rounded-lg transition-all shadow-lg shadow-[#0d59f2]/30 flex items-center justify-center gap-2 ${isSubmitting ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}>
                                     <span>Log in</span>
                                     <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
                                 </button>
@@ -109,7 +124,7 @@ export default function Login() {
             <footer className="fixed bottom-0 left-0 right-0 p-4 z-20 hidden lg:flex justify-between items-center bg-transparent pointer-events-none px-12 pb-6">
                 <div className="flex gap-6 pointer-events-auto">
                     <a className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200" href="/privacy-policy">Privacy Policy</a>
-                    <a className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200" href="/terms">Terms of Service</a>
+                    <a className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200" href="/terms-of-service">Terms of Service</a>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 pointer-events-auto bg-white/80 dark:bg-black/50 px-3 py-1.5 rounded-full backdrop-blur-sm">
                     <span className="material-symbols-outlined text-[14px]">lock</span>
