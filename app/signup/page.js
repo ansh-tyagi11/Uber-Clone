@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useSession, signIn } from "next-auth/react";
 import { useForm } from 'react-hook-form';
 import { createUser } from "@/actions/useractions";
-import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function Signup() {
     const { data: session, status } = useSession();
+    const router = useRouter()
     const {
         register,
         handleSubmit,
@@ -20,8 +21,12 @@ export default function Signup() {
 
     const onSubmit = async (data) => {
         let res = await createUser(data)
-
-        if(res.success) return toast.message("User Created.")
+        console.log(res)
+        if (res?.error) {
+            toast(data.error)
+            return;
+        }
+        if (res.success) return router.push(`/otp?signup=true&email=${encodeURIComponent(res.email)}&id=${encodeURIComponent(res.otpId)}`)
         let a = await data;
         console.log(a)
         reset();

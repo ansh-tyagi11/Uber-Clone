@@ -2,13 +2,15 @@
 import connectDB from "@/db/connectDB";
 import User from "@/models/User";
 import { otpEmail } from "@/lib/otpEmail";
-import { generateOtp, hashedPassword } from "@/utils/generateOtp";
+import { generateOtp, hashedPassword, generateOtpId } from "@/utils/generateOtp";
+import otpStore from "@/models/otpStore";
+import { redirect } from "next/dist/server/api-utils";
 
 export const createUser = async (data) => {
 
     await connectDB();
 
-    let username = data.username;
+    let name = data.username;
     let email = data.email;
     let confirmPassword = data.confirmPassword;
 
@@ -16,11 +18,41 @@ export const createUser = async (data) => {
 
     if (existingUser) return { error: "User already exists. Please login instead." };
 
-    const otp = generateOtp()
+    const otp = generateOtp();
+    const password = await hashedPassword(confirmPassword);
+    const otpId = generateOtpId();
 
-    console.log(otp)
-    console.log(username)
-    console.log(email)
-    console.log(confirmPassword)
-    return;
+    const alreadyOtp = await otpStore.findOne({ email })
+    if (alreadyOtp) {
+        let otpId = alreadyOtp.otpId;
+        alreadyOtp.otp = otp;
+        await alreadyOtp.save();
+
+        await otpEmail(email, name, otp);
+
+        return { success: true, email, otpId }
+    }
+
+    await otpStore.create({
+        otpId,
+        email,
+        name,
+        password,
+        otp,
+        expiresAt: Date.now() + 5 * 60 * 1000,
+    });
+
+    await otpEmail(email, name, otp);
+
+    return { success: true, email, otpId }
+}
+
+export default async function verifyOtpId(email, otpId) {
+    await connectDB();
+    console.log(email);
+    console.log(otpId)
+    let findEmail = await otpStore.findOne({ email, otpId });
+    if (findEmail) return { success: true, message: "Session Found." }
+
+    return { success: true, message: "Session not found.",redirect:"/signup" }
 }

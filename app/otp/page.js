@@ -1,15 +1,27 @@
 "use client"
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { toast } from 'react-toastify';
+import verifyOtpId from '@/actions/useractions';
 
 export default function OTPVerification() {
     const [otp, setOtp] = useState(new Array(6).fill(""));
     const [resendTimer, setResendTimer] = useState(25);
     const inputRefs = useRef([]);
+    const searchParams = useSearchParams();
+    const email = searchParams.get("email");
+    const otpId = decodeURIComponent(searchParams.get("id"));
 
     useEffect(() => {
+        verifySession();
+    }, [])
+
+    useEffect(() => {
+        // verifySession();
         if (resendTimer > 0) {
             const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
+            console.log(email)
             return () => clearTimeout(timer);
         }
     }, [resendTimer]);
@@ -37,7 +49,8 @@ export default function OTPVerification() {
     };
 
     const handleSubmit = () => {
-        console.log('OTP submitted:', otp.join(''));
+        let fullOtp = otp.join('');
+        console.log('OTP submitted:', fullOtp);
     };
 
     const handleResend = () => {
@@ -46,6 +59,13 @@ export default function OTPVerification() {
             console.log('Resending OTP...');
         }
     };
+
+
+    const verifySession = async () => {
+        let verification = await verifyOtpId(email, otpId);
+
+        if (verification.success) return console.log(verification.message)
+    }
 
     return (
         <div className="bg-gray-50 dark:bg-[#101622] text-slate-900 dark:text-white min-h-screen flex flex-col antialiased">
@@ -83,11 +103,11 @@ export default function OTPVerification() {
                                 </h1>
                                 <p className="text-slate-500 dark:text-slate-400 text-base leading-relaxed">
                                     We've sent a 6-digit code to{' '}
-                                    <span className="font-semibold text-slate-700 dark:text-slate-200">+1 (555) ***-89</span>.
-                                    <a href="#" className="text-blue-600 hover:text-blue-700 font-semibold ml-1 inline-flex items-center gap-0.5 text-sm transition-colors">
+                                    <span className="font-semibold text-slate-700 dark:text-slate-200">{email}</span>.
+                                    <Link href="/signup" className="text-blue-600 hover:text-blue-700 font-semibold ml-1 inline-flex items-center gap-0.5 text-sm transition-colors">
                                         Edit
                                         <span className="material-symbols-outlined text-[16px]">edit</span>
-                                    </a>
+                                    </Link>
                                 </p>
                             </div>
 
