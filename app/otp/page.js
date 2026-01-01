@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import verifyOtpId from '@/actions/useractions';
+import { verifyOtp } from '@/actions/useractions';
 
 export default function OTPVerification() {
     const [otp, setOtp] = useState(new Array(6).fill(""));
@@ -18,7 +19,6 @@ export default function OTPVerification() {
     }, [])
 
     useEffect(() => {
-        // verifySession();
         if (resendTimer > 0) {
             const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
             console.log(email)
@@ -48,23 +48,29 @@ export default function OTPVerification() {
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         let fullOtp = otp.join('');
+        let verificationOtp = await verifyOtp(email, fullOtp)
         console.log('OTP submitted:', fullOtp);
+        if (verificationOtp.success) return console.log(verificationOtp.message)
     };
 
-    const handleResend = () => {
+    const handleResend = async () => {
         if (resendTimer === 0) {
             setResendTimer(25);
             console.log('Resending OTP...');
         }
+
+        let resendOtp = await resendSignupOtp(email);
+        console.log(resendOtp)
     };
 
 
     const verifySession = async () => {
         let verification = await verifyOtpId(email, otpId);
 
-        if (verification.success) return console.log(verification.message)
+        if (!verification.success) return console.log(verification.message)
+
     }
 
     return (

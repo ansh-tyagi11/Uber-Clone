@@ -2,6 +2,8 @@
 import React from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
+import { login } from '@/actions/useractions';
+import { useRouter } from "next/navigation";
 
 export default function Login() {
     const { data: session, status } = useSession();
@@ -9,12 +11,20 @@ export default function Login() {
         handleSubmit,
         reset,
         formState: { errors, isSubmitting }
-    } = useForm()
+    } = useForm();
+    const router = useRouter();
 
     const onSubmit = async (data) => {
+        let res = await login(data)
+        console.log(res)
+        if (res?.error) {
+            toast(data.error)
+            return;
+        }
+        if (res.success) return router.push(`/otp?login=true&email=${encodeURIComponent(res.email)}&id=${encodeURIComponent(res.otpId)}`)
         let a = await data;
         console.log(a)
-        reset();
+        // reset();
     }
 
     return (

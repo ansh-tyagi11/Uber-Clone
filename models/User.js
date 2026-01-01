@@ -9,6 +9,7 @@ const UserSchema = new Schema({
     signUp: {
         name: { type: String, },
         email: { type: String, },
+        password: { type: String, },
     },
     createdAt: { type: Date, default: Date.now, },
     updatedAt: { type: Date, default: Date.now, }
