@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import verifyOtpId from '@/actions/useractions';
-import { verifyOtp } from '@/actions/useractions';
+import { verifyOtp, resendSignupOtp } from '@/actions/useractions';
+import { useRouter } from 'next/navigation';
 
 export default function OTPVerification() {
     const [otp, setOtp] = useState(new Array(6).fill(""));
@@ -13,6 +14,7 @@ export default function OTPVerification() {
     const searchParams = useSearchParams();
     const email = searchParams.get("email");
     const otpId = decodeURIComponent(searchParams.get("id"));
+    const router = useRouter();
 
     useEffect(() => {
         verifySession();
@@ -21,7 +23,6 @@ export default function OTPVerification() {
     useEffect(() => {
         if (resendTimer > 0) {
             const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
-            console.log(email)
             return () => clearTimeout(timer);
         }
     }, [resendTimer]);
@@ -51,25 +52,29 @@ export default function OTPVerification() {
     const handleSubmit = async () => {
         let fullOtp = otp.join('');
         let verificationOtp = await verifyOtp(email, fullOtp)
-        console.log('OTP submitted:', fullOtp);
-        if (verificationOtp.success) return console.log(verificationOtp.message)
+        if (verificationOtp.success) return toast.success(verificationOtp.message)
     };
 
     const handleResend = async () => {
         if (resendTimer === 0) {
             setResendTimer(25);
-            console.log('Resending OTP...');
         }
 
         let resendOtp = await resendSignupOtp(email);
-        console.log(resendOtp)
+
+        if (resendOtp?.error) return toast.error(resendOtp.error);
+
+        if (resendOtp.success) return toast.success(resendOtp.message)
     };
 
 
     const verifySession = async () => {
         let verification = await verifyOtpId(email, otpId);
 
-        if (!verification.success) return console.log(verification.message)
+        if (!verification.success) {
+            toast("No such session found.")
+            // return router.push("/signup")
+        }
 
     }
 

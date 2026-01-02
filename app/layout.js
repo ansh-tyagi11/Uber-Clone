@@ -1,6 +1,7 @@
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import SessionWrapper from "@/components/SessionWrapper";
+import { ToastContainer } from "react-toastify";
 
 const montserrat = Montserrat({
   subsets: ["sans-serif"],
@@ -27,6 +28,19 @@ export default function RootLayout({ children }) {
       >
         <SessionWrapper>
           {children}
+          <ToastContainer
+            position="top-right"
+            autoClose={2500}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            limit={3}
+            theme="colored"
+          />
         </SessionWrapper>
       </body>
     </html>

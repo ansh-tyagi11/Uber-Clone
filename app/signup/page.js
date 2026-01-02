@@ -24,7 +24,7 @@ export default function Signup() {
         console.log(res)
         if (res?.error) {
             console.log(res.error)
-            // toast(data.error)
+            toast.error(data.error)
             return;
         }
         if (res.success) return router.push(`/otp?signup=true&email=${encodeURIComponent(res.email)}&id=${encodeURIComponent(res.otpId)}`)

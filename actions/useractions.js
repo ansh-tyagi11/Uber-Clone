@@ -123,14 +123,14 @@ export async function login(data) {
 
 export async function resendSignupOtp(email) {
     await connectDB();
-    let alreadyOtp = await otpStore.find({ email });
-    if (!alreadyOtp) return { error: "No session found" };
+    let alreadyOtp = await otpStore.findOne({ email });
+    if (!alreadyOtp) return { error: "We couldn't find an active signup session for this email. Please sign up again." };
 
     let newOtp = generateOtp();
     alreadyOtp.otp = newOtp;
     await alreadyOtp.save();
 
-    await sendEmail(email, alreadyOtp.name, otp);
+    await sendEmail(email, alreadyOtp.name, newOtp);
 
-    return true;
+    return { success: true, message: "A new verification code has been sent to your email." };
 }

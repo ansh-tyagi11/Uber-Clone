@@ -7,7 +7,7 @@ import Footer from "./Footer";
 const SessionWrapper = ({ children }) => {
   const pathname = usePathname()
 
-  const hiddenLayout = pathname === "/login" || pathname === "/signup";
+  const hiddenLayout = pathname === "/login" || pathname === "/signup" || pathname === "/otp";
 
   return (
     <SessionProvider>

@@ -18,7 +18,7 @@ export default function Login() {
         let res = await login(data)
         console.log(res)
         if (res?.error) {
-            toast(data.error)
+            toast.error(data.error)
             return;
         }
         if (res.success) return router.push(`/otp?login=true&email=${encodeURIComponent(res.email)}&id=${encodeURIComponent(res.otpId)}`)
