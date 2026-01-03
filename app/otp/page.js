@@ -73,7 +73,7 @@ export default function OTPVerification() {
 
         if (!verification.success) {
             toast("No such session found.")
-            // return router.push("/signup")
+            return router.push("/signup")
         }
 
     }

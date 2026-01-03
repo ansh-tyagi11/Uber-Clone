@@ -4,6 +4,7 @@ import { useSession, signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { login } from '@/actions/useractions';
 import { useRouter } from "next/navigation";
+import { toast } from 'react-toastify';
 
 export default function Login() {
     const { data: session, status } = useSession();
@@ -18,7 +19,7 @@ export default function Login() {
         let res = await login(data)
         console.log(res)
         if (res?.error) {
-            toast.error(data.error)
+            toast.error(res.error)
             return;
         }
         if (res.success) return router.push(`/otp?login=true&email=${encodeURIComponent(res.email)}&id=${encodeURIComponent(res.otpId)}`)
@@ -70,7 +71,7 @@ export default function Login() {
                                         <label className="text-[#0d121c] dark:text-gray-200 text-sm font-semibold">
                                             Password
                                         </label>
-                                        <a className="text-sm font-medium text-[#0d59f2] hover:text-[#0b4ecf] hover:underline" href="#">Forgot password?</a>
+                                        <a className="text-sm font-medium text-[#0d59f2] hover:text-[#0b4ecf] hover:underline" href="/forgot-password">Forgot password?</a>
                                     </div>
                                     <div className="relative">
                                         <input

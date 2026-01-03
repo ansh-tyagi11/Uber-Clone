@@ -5,6 +5,8 @@ import { otpEmail } from "@/lib/otpEmail";
 import { generateOtp, hashedPassword, generateOtpId, verifyPassword } from "@/utils/generateOtp";
 import otpStore from "@/models/otpStore";
 import { sendEmail } from "@/lib/mailer";
+import passwordReset from "@/models/passwordReset";
+import crypto from "crypto";
 
 export const createUser = async (data) => {
 
@@ -133,4 +135,13 @@ export async function resendSignupOtp(email) {
     await sendEmail(email, alreadyOtp.name, newOtp);
 
     return { success: true, message: "A new verification code has been sent to your email." };
+}
+
+export const forResetPassword = async (email) => {
+    await connectDB();
+
+    let user = await User.findOne({ email });
+
+    console.log(user)
+    return
 }
