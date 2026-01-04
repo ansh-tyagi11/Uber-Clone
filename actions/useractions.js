@@ -118,7 +118,7 @@ export async function login(data) {
         expiresAt: Date.now() + 5 * 60 * 1000,
     });
 
-    await sendEmail(email, userName, otp);
+    await otpEmail(email, userName, otp);
 
     return { success: true, email, otpId }
 }
@@ -132,7 +132,7 @@ export async function resendSignupOtp(email) {
     alreadyOtp.otp = newOtp;
     await alreadyOtp.save();
 
-    await sendEmail(email, alreadyOtp.name, newOtp);
+    await otpEmail(email, alreadyOtp.name, newOtp);
 
     return { success: true, message: "A new verification code has been sent to your email." };
 }
@@ -142,6 +142,63 @@ export const forResetPassword = async (email) => {
 
     let user = await User.findOne({ email });
 
-    console.log(user)
-    return
+    const token = crypto.randomBytes(32).toString("hex");
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    await passwordReset.findOneAndUpdate(
+        { userId: user._id },
+        {
+            userId: user._id,
+            token: hashedToken,
+            expiresAt: Date.now() + 1000 * 60 * 15, // 15 minutes
+        },
+        { upsert: true }
+    );
+
+    const resetLink = `http://localhost:3000/forgot-password?token=${token}&id=${user._id}`;
+
+    await sendEmail(user.email, "Reset your Password", resetLink);
+
+    return { success: true, message: "Reset link sent (if email is valid)" };
+}
+
+export const forCheckToken = async (token) => {
+    await connectDB();
+
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    const record = await passwordReset.findOne({
+        token: hashedToken,
+        expiresAt: { $gt: Date.now() },
+    });
+
+    if (!record) {
+        return { success: false, message: "Invalid or expired reset link" }
+    }
+
+    return true;
+}
+
+export const forUpdatePassword = async (password, token, userId) => {
+    await connectDB();
+
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    const record = await passwordReset.findOne({
+        userId,
+        token: hashedToken,
+        expiresAt: { $gt: Date.now() },
+    });
+
+    if (!record) {
+        return { success: false, message: "Invalid or expired reset link" }
+    }
+
+    const newHashedPassword = await hashedPassword(password)
+
+    await User.findByIdAndUpdate(userId, { "signUp.password": newHashedPassword })
+
+    await passwordReset.deleteMany({ userId })
+
+    return { success: true, message: "Password Change Successfully. Kindly Login." }
 }

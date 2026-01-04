@@ -1,19 +1,75 @@
 "use client";
-import React, { useState } from 'react';
-import { useSearchParams } from "next/navigation";
-import { forResetPassword } from '@/actions/useractions';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from "next/navigation";
+import { forResetPassword, forUpdatePassword, forCheckToken } from '@/actions/useractions';
+import { toast } from 'react-toastify';
 
 const ForgotPassword = () => {
     const params = useSearchParams();
-    const [email, setEmail] = useState({});
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(null);
     const token = params.get("token");
     const userId = params.get("id");
+    const router = useRouter();
 
     const isResetMode = token && userId;
 
+    useEffect(() => {
+        if (!isResetMode) return;
+        if (!token) return;
+
+        checkToken();
+    }, [token, isResetMode]);
+
+
     const sendLink = async () => {
-        let response = await forResetPassword(email);
-        console.log(response)
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
+
+        try {
+            const response = await forResetPassword(email);
+
+            if (response?.success) {
+                toast.success(response.message);
+            } else {
+                toast.error(response?.message || "Something went wrong");
+            }
+        } catch (error) {
+            toast.error("Failed to send reset link");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const updatePassword = async () => {
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
+
+        try {
+            const response = await forUpdatePassword(password, token, userId);
+
+            if (response?.success) {
+                toast.success(response.message);
+                router.push("/login?reset=success");
+            } else {
+                toast.error(response?.message || "Something went wrong");
+            }
+        } catch (error) {
+            toast.error("Failed to send reset link");
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
+    const checkToken = async () => {
+        let result = await forCheckToken(token);
+        if (!result.success) {
+            toast.error(result.message);
+            router.push("/forgot-password");
+        }
     }
 
     return (
@@ -36,11 +92,11 @@ const ForgotPassword = () => {
                     <div className="flex-1 flex flex-col px-8">
                         {/* Headlines */}
                         <div className="pb-6">
-                            <h1 className="text-[#111318] dark:text-white tracking-tight text-[32px] font-bold leading-tight text-left mb-3">Forgot Password?</h1>
+                            {!isResetMode && <h1 className="text-[#111318] dark:text-white tracking-tight text-[32px] font-bold leading-tight text-left mb-3">Forgot Password?</h1>}
                             {isResetMode && <h1 className="text-[#111318] dark:text-white tracking-tight text-[32px] font-bold leading-tight text-left mb-3">New Password</h1>}
-                            <p className="text-gray-500 dark:text-gray-400 text-base font-normal leading-relaxed">
+                            {!isResetMode && <p className="text-gray-500 dark:text-gray-400 text-base font-normal leading-relaxed">
                                 Don't worry! It happens. Please enter the email or phone number associated with your account.
-                            </p>
+                            </p>}
                             {isResetMode && <p className="text-gray-500 dark:text-gray-400 text-base font-normal leading-relaxed">
                                 Create a new password for your account. Make sure it’s something secure and easy for you to remember.
                             </p>}
@@ -48,7 +104,7 @@ const ForgotPassword = () => {
                         {/* Form */}
                         <div className="flex flex-col gap-6 w-full mt-2">
                             {/* Input Field */}
-                            <div className="w-full">
+                            {!isResetMode && <div className="w-full">
                                 <label className="flex flex-col w-full">
                                     <span className="text-[#111318] dark:text-gray-200 text-sm font-semibold leading-normal pb-2 ml-1">
                                         Email or Phone
@@ -62,18 +118,18 @@ const ForgotPassword = () => {
                                             placeholder="example@email.com"
                                             type="email"
                                             name='email'
-                                            
+
                                             onChange={(e) => setEmail(e.target.value)}
                                             required
                                         />
                                     </div>
                                 </label>
-                            </div>
+                            </div>}
 
-                            <button onClick={sendLink} className="w-full bg-[#1754cf] hover:bg-blue-700 text-white font-bold h-14 px-6 rounded-xl shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
-                                <span>Send Reset Link</span>
+                            {!isResetMode && <button onClick={sendLink} disabled={isSubmitting} className={`w-full bg-[#1754cf] hover:bg-blue-700 text-white font-bold h-14 px-6 rounded-xl shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 ${isSubmitting ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`} >
+                                <span>{isSubmitting ? "Sending..." : "Send Reset Link"}</span>
                                 <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
-                            </button>
+                            </button>}
 
                             {isResetMode && <div className="w-full">
                                 <label className="flex flex-col w-full">
@@ -81,21 +137,19 @@ const ForgotPassword = () => {
                                         New Password
                                     </span>
                                     <div className="relative group">
-                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <span className="material-symbols-outlined text-gray-400 group-focus-within:text-[#1754cf] transition-colors">mail</span>
-                                        </div>
                                         <input
-                                            className="form-input flex w-full min-w-0 resize-none overflow-hidden rounded-xl text-[#111318] dark:text-white border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 h-14 placeholder:text-gray-400 pl-11 pr-4 text-base font-medium leading-normal focus:outline-0 focus:ring-2 focus:ring-[#1754cf]/20 focus:border-[#1754cf] transition-all"
+                                            className="form-input flex w-full min-w-0 resize-none overflow-hidden rounded-xl text-[#111318] dark:text-white border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 h-14 placeholder:text-gray-400 pl-2 pr-4 text-base font-medium leading-normal focus:outline-0 focus:ring-2 focus:ring-[#1754cf]/20 focus:border-[#1754cf] transition-all"
                                             placeholder="New Password"
-                                            type="text"
-                                            name='text'
+                                            type="password"
+                                            name="password"
                                             required
+                                            onChange={(e) => setPassword(e.target.value)}
                                         />
                                     </div>
                                 </label>
                             </div>}
-                            {isResetMode && <button className="w-full bg-[#1754cf] hover:bg-blue-700 text-white font-bold h-14 px-6 rounded-xl shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
-                                <span>Send Reset Link</span>
+                            {isResetMode && <button onClick={updatePassword} disabled={isSubmitting} className={`w-full bg-[#1754cf] hover:bg-blue-700 text-white font-bold h-14 px-6 rounded-xl shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 ${isSubmitting ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`} >
+                                <span>{isSubmitting ? "Password Changed" : "Change Password"}</span>
                                 <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
                             </button>}
                         </div>
@@ -110,113 +164,9 @@ const ForgotPassword = () => {
                     {/* Spacing for bottom safe area on mobile */}
                     <div className="h-4 w-full"></div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }
 
 export default ForgotPassword
-
-
-// "use client";
-// import React, { useState } from "react";
-// import { useSearchParams, useRouter } from "next/navigation";
-
-// const ForgotPassword = () => {
-//     const params = useSearchParams();
-//     const router = useRouter();
-
-//     const token = params.get("token");
-//     const userId = params.get("id");
-
-//     const [email, setEmail] = useState("");
-//     const [password, setPassword] = useState("");
-
-//     const isResetMode = true; // <-- condition
-
-//     async function handleSendLink(e) {
-//         e.preventDefault();
-
-//         await fetch("/api/auth/forgot-password", {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify({ email }),
-//         });
-
-//         alert("If the email exists, a reset link has been sent.");
-//     }
-
-//     async function handleResetPassword(e) {
-//         e.preventDefault();
-
-//         const res = await fetch("/api/auth/reset-password", {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify({ token, userId, password }),
-//         });
-
-//         const data = await res.json();
-
-//         if (data.error) return alert(data.error);
-
-//         router.push("/login?reset=success");
-//     }
-
-//     return (
-//         <div className="bg-[#f6f6f8] dark:bg-[#111621] min-h-screen flex items-center justify-center p-4">
-//             <div className="w-full max-w-md rounded-3xl bg-white dark:bg-[#111621] shadow-2xl">
-
-//                 {/* Header */}
-//                 <div className="px-8 pt-6 pb-4">
-//                     <h1 className="text-2xl font-bold text-[#111318] dark:text-white">
-//                         {isResetMode ? "Set New Password" : "Forgot Password?"}
-//                     </h1>
-
-//                     {!isResetMode && (
-//                         <p className="text-gray-500 dark:text-gray-400 mt-1">
-//                             Enter your email to receive a reset link.
-//                         </p>
-//                     )}
-//                 </div>
-
-//                 {/* ====== FORGOT MODE (send link) ====== */}
-//                 {!isResetMode && (
-//                     <form onSubmit={handleSendLink} className="px-8 pb-6 space-y-4">
-//                         <input
-//                             type="email"
-//                             className="w-full border rounded-xl p-3 bg-gray-50 dark:bg-gray-800"
-//                             placeholder="example@email.com"
-//                             value={email}
-//                             onChange={(e) => setEmail(e.target.value)}
-//                             required
-//                         />
-
-//                         <button className="w-full bg-blue-600 text-white h-12 rounded-xl">
-//                             Send Reset Link
-//                         </button>
-//                     </form>
-//                 )}
-
-//                 {/* ====== RESET MODE (token present) ====== */}
-//                 {isResetMode && (
-//                     <form onSubmit={handleResetPassword} className="px-8 pb-6 space-y-4">
-//                         <input
-//                             type="password"
-//                             className="w-full border rounded-xl p-3 bg-gray-50 dark:bg-gray-800"
-//                             placeholder="Enter new password"
-//                             value={password}
-//                             onChange={(e) => setPassword(e.target.value)}
-//                             required
-//                         />
-
-//                         <button className="w-full bg-green-600 text-white h-12 rounded-xl">
-//                             Reset Password
-//                         </button>
-//                     </form>
-//                 )}
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default ForgotPassword;
