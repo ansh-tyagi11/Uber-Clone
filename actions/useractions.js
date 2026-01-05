@@ -7,6 +7,7 @@ import otpStore from "@/models/otpStore";
 import { sendEmail } from "@/lib/mailer";
 import passwordReset from "@/models/passwordReset";
 import crypto from "crypto";
+import { sendEmailContact } from "@/lib/mailerContact";
 
 export const createUser = async (data) => {
 
@@ -176,7 +177,7 @@ export const forCheckToken = async (token) => {
         return { success: false, message: "Invalid or expired reset link" }
     }
 
-    return true;
+    return { success: true };
 }
 
 export const forUpdatePassword = async (password, token, userId) => {
@@ -201,4 +202,21 @@ export const forUpdatePassword = async (password, token, userId) => {
     await passwordReset.deleteMany({ userId })
 
     return { success: true, message: "Password Change Successfully. Kindly Login." }
+}
+
+export async function forContact(form) {
+
+    const { name, email, topic, message } = form;
+
+    let result = await sendEmailContact(name, email, topic, `
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Topic:</strong> ${topic}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+    ` );
+
+    if (!result) return { success: false, message: "Sorry, we couldn't send your message. Please try again later." }
+
+    return { success: true, message: "Thank you for contacting us! Your message has been sent successfully. We will get back to you soon." }
 }

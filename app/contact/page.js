@@ -1,6 +1,38 @@
-import React from "react";
+"use client";
+import { forContact } from "@/actions/useractions";
+import React, { useState } from "react";
+import { set } from "react-hook-form";
+import { toast } from "react-toastify";
 
-export default function contact() {
+export default function Contact() {
+    const [form, setForm] = useState({ name: "", email: "", topic: "", message: "" });
+    const [isSubmitting, setIsSubmitting] = useState(null)
+
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value })
+    }
+
+    const contact = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+
+        try {
+            let response = await forContact(form);
+
+            if (response.success) {
+                setForm({ name: "", email: "", topic: "", message: "" });
+                toast.success(response.message);
+            } else {
+                toast.error(response.message || "Something went wrong. Please try again.");
+            }
+        } catch (error) {
+            toast.error("An unexpected error occurred. Please try again.");
+            console.error(error);
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
     return (
         <>
             <div className="bg-[#f6f6f8] dark:bg-[#111621] font-display min-h-screen flex flex-col overflow-x-hidden text-[#111318] dark:text-white antialiased">
@@ -46,10 +78,12 @@ export default function contact() {
                                             <input
                                                 className="w-full pl-11 pr-4 py-3.5 rounded-lg border border-[#dcdfe5] dark:border-gray-700 bg-white dark:bg-gray-800 text-[#111318] dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-[#195de6]/20 focus:border-[#195de6] outline-none transition-all"
                                                 autoComplete="name"
-                                                name="email"
+                                                name="name"
+                                                value={form.name}
                                                 placeholder="Jane Doe"
                                                 type="text"
                                                 required
+                                                onChange={handleChange}
                                             />
                                         </div>
                                     </div>
@@ -65,7 +99,9 @@ export default function contact() {
                                                 placeholder="name@example.com"
                                                 name="email"
                                                 type="email"
+                                                value={form.email}
                                                 autoComplete="email"
+                                                onChange={handleChange}
                                                 required
                                             />
                                         </div>
@@ -79,7 +115,9 @@ export default function contact() {
                                         <select
                                             className="w-full pl-11 pr-10 py-3.5 rounded-lg border border-[#dcdfe5] dark:border-gray-700 bg-white dark:bg-gray-800 text-[#111318] dark:text-white focus:ring-2 focus:ring-[#195de6]/20 focus:border-[#195de6] outline-none appearance-none transition-all cursor-pointer"
                                             id="topic"
-                                            defaultValue=""
+                                            name="topic"
+                                            value={form.topic}
+                                            onChange={handleChange}
                                         >
                                             <option disabled value="">Select a topic</option>
                                             <option value="trip">Issue with a trip</option>
@@ -99,12 +137,18 @@ export default function contact() {
                                     <textarea
                                         className="w-full p-4 rounded-lg border border-[#dcdfe5] dark:border-gray-700 bg-white dark:bg-gray-800 text-[#111318] dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-[#195de6]/20 focus:border-[#195de6] outline-none resize-none transition-all"
                                         placeholder="Tell us more about how we can help..."
-                                        rows="4">
+                                        rows="4"
+                                        type="text"
+                                        name="message"
+                                        value={form.message}
+                                        onChange={handleChange}
+                                        required
+                                    >
                                     </textarea>
                                 </div>
                                 {/* Submit Button */}
-                                <button
-                                    className="w-full h-12 bg-[#195de6] hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg shadow-[#195de6]/30 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+                                <button onClick={contact} disabled={isSubmitting}
+                                    className={`w-full h-12 bg-[#195de6] hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg shadow-[#195de6]/30 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5 active:translate-y-0 ${isSubmitting ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
                                     type="submit">
                                     <span>Send Message</span>
                                     <span className="material-symbols-outlined text-[20px]">send</span>
