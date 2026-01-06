@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { Schema, model } from "mongoose";
 
-const otpStoreSchema = new mongoose.Schema(
+const otpStoreSchema = new Schema(
     {
         otpId: { type: String, required: true, unique: true, },
         email: { type: String, required: true, lowercase: true, trim: true, },

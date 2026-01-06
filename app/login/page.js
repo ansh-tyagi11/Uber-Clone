@@ -17,15 +17,12 @@ export default function Login() {
 
     const onSubmit = async (data) => {
         let res = await login(data)
-        console.log(res)
         if (res?.error) {
             toast.error(res.error)
             return;
         }
+        reset();
         if (res.success) return router.push(`/otp?login=true&email=${encodeURIComponent(res.email)}&id=${encodeURIComponent(res.otpId)}`)
-        let a = await data;
-        console.log(a)
-        // reset();
     }
 
     return (
