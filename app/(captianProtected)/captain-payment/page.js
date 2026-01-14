@@ -15,15 +15,35 @@ const page = () => {
                                 {/* Segmented Buttons Filter */}
                                 <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
                                     <label className="cursor-pointer group">
-                                        <input className="hidden peer" name="filter" type="radio" value="today" readOnly/>
-                                        <span className="px-4 py-1.5 text-xs font-semibold rounded-lg block transition-all text-slate-500 peer-checked:bg-white peer-checked:text-[#137fec] peer-checked:shadow-sm dark:peer-checked:bg-slate-700 dark:peer-checked:text-white">Today</span>
+                                        <input
+                                            className="hidden peer"
+                                            name="filter"
+                                            type="radio"
+                                            value="today"
+                                            defaultChecked
+                                        />
+                                        <span className="px-4 py-1.5 text-xs font-semibold rounded-lg block transition-all text-slate-500 peer-checked:bg-white peer-checked:text-[#137fec] peer-checked:shadow-sm dark:peer-checked:bg-slate-700 dark:peer-checked:text-white">
+                                            Today
+                                        </span>
                                     </label>
                                     <label className="cursor-pointer group">
-                                        <input checked="" className="hidden peer" name="filter" type="radio" value="week" readOnly/>
+                                        <input
+                                            className="hidden peer"
+                                            name="filter"
+                                            type="radio"
+                                            value="week"
+                                            defaultChecked
+                                        />
                                         <span className="px-4 py-1.5 text-xs font-semibold rounded-lg block transition-all text-slate-500 peer-checked:bg-white peer-checked:text-[#137fec] peer-checked:shadow-sm dark:peer-checked:bg-slate-700 dark:peer-checked:text-white">This Week</span>
                                     </label>
                                     <label className="cursor-pointer group">
-                                        <input className="hidden peer" name="filter" type="radio" value="month" readOnly/>
+                                        <input
+                                            className="hidden peer"
+                                            name="filter"
+                                            type="radio"
+                                            value="month"
+                                            defaultChecked
+                                        />
                                         <span className="px-4 py-1.5 text-xs font-semibold rounded-lg block transition-all text-slate-500 peer-checked:bg-white peer-checked:text-[#137fec] peer-checked:shadow-sm dark:peer-checked:bg-slate-700 dark:peer-checked:text-white">Month</span>
                                     </label>
                                 </div>
@@ -68,60 +88,54 @@ const page = () => {
                                     </div>
                                     {/* Tue */}
                                     <div className="flex-1 flex flex-col items-center group">
-                                        <div
-                                            className="w-full bg-[#137fec]/20 rounded-t-lg relative h-[80%] transition-all group-hover:bg-[#137fec]/40">
-                                            <div
-                                                className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="w-full bg-[#137fec]/20 rounded-t-lg relative h-[80%] transition-all group-hover:bg-[#137fec]/40">
+                                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                                                 $190</div>
                                         </div>
                                         <span className="mt-3 text-xs font-medium text-[#4c739a]">Tue</span>
                                     </div>
                                     {/* Wed */}
                                     <div className="flex-1 flex flex-col items-center group">
-                                        <div
-                                            className="w-full bg-[#137fec]/20 rounded-t-lg relative h-[45%] transition-all group-hover:bg-[#137fec]/40">
-                                            <div
-                                                className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                                                $110</div>
+                                        <div className="w-full bg-[#137fec]/20 rounded-t-lg relative h-[45%] transition-all group-hover:bg-[#137fec]/40">
+                                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                                $110
+                                            </div>
                                         </div>
                                         <span className="mt-3 text-xs font-medium text-[#4c739a]">Wed</span>
                                     </div>
                                     {/* Thu */}
                                     <div className="flex-1 flex flex-col items-center group">
-                                        <div
-                                            className="w-full bg-[#137fec]/20 rounded-t-lg relative h-[70%] transition-all group-hover:bg-[#137fec]/40">
-                                            <div
-                                                className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                                                $165</div>
+                                        <div className="w-full bg-[#137fec]/20 rounded-t-lg relative h-[70%] transition-all group-hover:bg-[#137fec]/40">
+                                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                                $165
+                                            </div>
                                         </div>
                                         <span className="mt-3 text-xs font-medium text-[#4c739a]">Thu</span>
                                     </div>
                                     {/* Fri */}
                                     <div className="flex-1 flex flex-col items-center group">
                                         <div className="w-full bg-[#137fec] rounded-t-lg relative h-[95%] shadow-md">
-                                            <div
-                                                className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                                                $240</div>
+                                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                                $240
+                                            </div>
                                         </div>
                                         <span className="mt-3 text-xs font-bold text-[#137fec]">Fri</span>
                                     </div>
                                     {/* Sat */}
                                     <div className="flex-1 flex flex-col items-center group">
-                                        <div
-                                            className="w-full bg-[#137fec]/20 rounded-t-lg relative h-[85%] transition-all group-hover:bg-[#137fec]/40">
-                                            <div
-                                                className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                                                $210</div>
+                                        <div className="w-full bg-[#137fec]/20 rounded-t-lg relative h-[85%] transition-all group-hover:bg-[#137fec]/40">
+                                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                                $210
+                                            </div>
                                         </div>
                                         <span className="mt-3 text-xs font-medium text-[#4c739a]">Sat</span>
                                     </div>
                                     {/* Sun */}
                                     <div className="flex-1 flex flex-col items-center group">
-                                        <div
-                                            className="w-full bg-[#137fec]/20 rounded-t-lg relative h-[60%] transition-all group-hover:bg-[#137fec]/40">
-                                            <div
-                                                className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                                                $185</div>
+                                        <div className="w-full bg-[#137fec]/20 rounded-t-lg relative h-[60%] transition-all group-hover:bg-[#137fec]/40">
+                                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                                $185
+                                            </div>
                                         </div>
                                         <span className="mt-3 text-xs font-medium text-[#4c739a]">Sun</span>
                                     </div>
@@ -134,10 +148,8 @@ const page = () => {
                                     <button className="text-sm font-semibold text-[#137fec] hover:underline">View All History</button>
                                 </div>
                                 {/* Trip Row 1 (Expanded Example) */}
-                                <div
-                                    className="bg-white dark:bg-[#1a2632] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                                    <div
-                                        className="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                <div className="bg-white dark:bg-[#1a2632] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                                    <div className="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                                         <div className="flex items-center gap-4">
                                             <div className="bg-slate-100 dark:bg-slate-800 p-2 rounded-lg text-slate-500">
                                                 <span className="material-symbols-outlined">schedule</span>
@@ -157,8 +169,7 @@ const page = () => {
                                         </div>
                                     </div>
                                     {/* Breakdown Panel */}
-                                    <div
-                                        className="px-16 pb-6 pt-2 bg-slate-50/50 dark:bg-slate-800/20 border-t border-slate-100 dark:border-slate-800">
+                                    <div className="px-16 pb-6 pt-2 bg-slate-50/50 dark:bg-slate-800/20 border-t border-slate-100 dark:border-slate-800">
                                         <div className="space-y-2 text-sm">
                                             <div className="flex justify-between">
                                                 <span className="text-[#4c739a]">Base Fare</span>
@@ -176,8 +187,7 @@ const page = () => {
                                                 <span>Service Fee</span>
                                                 <span>-$1.30</span>
                                             </div>
-                                            <div
-                                                className="pt-2 mt-2 border-t border-slate-200 dark:border-slate-700 flex justify-between font-bold text-[#0d141b] dark:text-white">
+                                            <div className="pt-2 mt-2 border-t border-slate-200 dark:border-slate-700 flex justify-between font-bold text-[#0d141b] dark:text-white">
                                                 <span>Net Earnings</span>
                                                 <span>$14.20</span>
                                             </div>
@@ -185,10 +195,8 @@ const page = () => {
                                     </div>
                                 </div>
                                 {/* Trip Row 2 */}
-                                <div
-                                    className="bg-white dark:bg-[#1a2632] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                                    <div
-                                        className="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                <div className="bg-white dark:bg-[#1a2632] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                                    <div className="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                                         <div className="flex items-center gap-4">
                                             <div className="bg-slate-100 dark:bg-slate-800 p-2 rounded-lg text-slate-500">
                                                 <span className="material-symbols-outlined">schedule</span>
@@ -209,10 +217,8 @@ const page = () => {
                                     </div>
                                 </div>
                                 {/* Trip Row 3 */}
-                                <div
-                                    className="bg-white dark:bg-[#1a2632] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                                    <div
-                                        className="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                <div className="bg-white dark:bg-[#1a2632] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                                    <div className="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                                         <div className="flex items-center gap-4">
                                             <div className="bg-slate-100 dark:bg-slate-800 p-2 rounded-lg text-slate-500">
                                                 <span className="material-symbols-outlined">schedule</span>
