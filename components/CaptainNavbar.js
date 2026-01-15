@@ -1,7 +1,12 @@
+"use client";
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const captainNavbar = () => {
+    const pathname = usePathname();
+    const isActive = (path) => pathname === path;
+
     return (
         <>
             {/* Top Navigation */}
@@ -14,16 +19,17 @@ const captainNavbar = () => {
                 </div>
                 <div className="pointer-events-auto flex items-center gap-4">
                     <nav className="hidden md:flex bg-white/80 backdrop-blur-md rounded-full px-2 p-1.5 shadow-sm border border-white/50">
-                        <Link className="px-5 py-2 text-sm font-semibold text-slate-800 bg-white rounded-full shadow-sm" href="/captain-home">
+                        <Link className={`px-5 py-2 text-sm  ${isActive('/captain-home') ? 'font-semibold text-slate-800 bg-white rounded-full shadow-sm' : 'font-medium text-slate-600 hover:text-[#2b9dee] transition-colors'} `}
+                            href="/captain-home">
                             Home
                         </Link>
-                        <Link className="px-5 py-2 text-sm font-medium text-slate-600 hover:text-[#2b9dee] transition-colors" href="/captain-rides">
+                        <Link className={`px-5 py-2 text-sm  ${isActive('/captain-rides') ? 'font-semibold text-slate-800 bg-white rounded-full shadow-sm' : 'font-medium text-slate-600 hover:text-[#2b9dee] transition-colors'} `} href="/captain-rides">
                             Rides
                         </Link>
-                        <Link className="px-5 py-2 text-sm font-medium text-slate-600 hover:text-[#2b9dee] transition-colors" href="/captain-payment">
+                        <Link className={`px-5 py-2 text-sm  ${isActive('/captain-payment') ? 'font-semibold text-slate-800 bg-white rounded-full shadow-sm' : 'font-medium text-slate-600 hover:text-[#2b9dee] transition-colors'} `} href="/captain-payment">
                             Payment
                         </Link>
-                        <Link className="px-5 py-2 text-sm font-medium text-slate-600 hover:text-[#2b9dee] transition-colors" href="/captain-profile">
+                        <Link className={`px-5 py-2 text-sm  ${isActive('/captain-profile') ? 'font-semibold text-slate-800 bg-white rounded-full shadow-sm' : 'font-medium text-slate-600 hover:text-[#2b9dee] transition-colors'} `} href="/captain-profile">
                             Profile
                         </Link>
                     </nav>
@@ -39,7 +45,7 @@ const captainNavbar = () => {
                         />
                     </div>
                 </div>
-            </header>
+            </header >
         </>
     )
 }

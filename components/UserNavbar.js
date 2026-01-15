@@ -1,7 +1,12 @@
+"use client";
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const userNavbar = () => {
+    const pathname = usePathname();
+    const isActive = (path) => pathname === path;
+
     return (
         <>
             {/* Top Navigation */}
@@ -14,16 +19,17 @@ const userNavbar = () => {
                 </div>
                 <div className="pointer-events-auto flex items-center gap-4">
                     <nav className="hidden md:flex bg-white/80 backdrop-blur-md rounded-full px-2 p-1.5 shadow-sm border border-white/50">
-                        <Link className="px-5 py-2 text-sm font-semibold text-slate-800 bg-white rounded-full shadow-sm" href="/user-home">
+                        <Link className={`px-5 py-2 text-sm  ${isActive('/user-home') ? 'font-semibold text-slate-800 bg-white rounded-full shadow-sm' : 'font-medium text-slate-600 hover:text-[#2b9dee] transition-colors'}`}
+                            href="/user-home">
                             Home
                         </Link>
-                        <Link className="px-5 py-2 text-sm font-medium text-slate-600 hover:text-[#2b9dee] transition-colors" href="/user-rides">
+                        <Link className={`px-5 py-2 text-sm  ${isActive('/user-rides') ? 'font-semibold text-slate-800 bg-white rounded-full shadow-sm' : 'font-medium text-slate-600 hover:text-[#2b9dee] transition-colors'}`} href="/user-rides">
                             Rides
                         </Link>
-                        <Link className="px-5 py-2 text-sm font-medium text-slate-600 hover:text-[#2b9dee] transition-colors" href="/user-payment">
+                        <Link className={`px-5 py-2 text-sm  ${isActive('/user-payment') ? 'font-semibold text-slate-800 bg-white rounded-full shadow-sm' : 'font-medium text-slate-600 hover:text-[#2b9dee] transition-colors'}`} href="/user-payment">
                             Payment
                         </Link>
-                        <Link className="px-5 py-2 text-sm font-medium text-slate-600 hover:text-[#2b9dee] transition-colors" href="/user-profile">
+                        <Link className={`px-5 py-2 text-sm  ${isActive('/user-profile') ? 'font-semibold text-slate-800 bg-white rounded-full shadow-sm' : 'font-medium text-slate-600 hover:text-[#2b9dee] transition-colors'}`} href="/user-profile">
                             Profile
                         </Link>
                     </nav>

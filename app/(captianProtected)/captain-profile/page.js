@@ -104,7 +104,7 @@ const page = () => {
                                         <span className="text-sm font-semibold text-[#57758e] dark:text-gray-400">Vehicle Model</span>
                                         <div className="relative">
                                             <input
-                                                className="w-full form-input rounded-lg border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3 pr-10"
+                                                className="w-full rounded-lg border border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3 pr-10"
                                                 type="text"
                                                 value="Toyota Camry (2023)"
                                                 readOnly
@@ -117,7 +117,7 @@ const page = () => {
                                             License Plate Number
                                         </span>
                                         <input
-                                            className="form-input rounded-lg border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3 font-mono uppercase"
+                                            className="w-full rounded-lg border border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3 pr-10 font-mono uppercase"
                                             type="text"
                                             value="CAL-778-99"
                                             readOnly
@@ -128,7 +128,7 @@ const page = () => {
                                         <div className="flex items-center gap-3">
                                             <div className="size-8 rounded-full border border-gray-200 shadow-inner bg-gray-400"></div>
                                             <input
-                                                className="flex-1 form-input rounded-lg border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3"
+                                                className="w-full rounded-lg border border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3 pr-10"
                                                 type="text"
                                                 value="Midnight Silver"
                                                 readOnly
@@ -140,7 +140,7 @@ const page = () => {
                                             Seating Capacity
                                         </span>
                                         <select
-                                            className="form-select rounded-lg border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3"
+                                            className="w-full rounded-lg border border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3 pr-10"
                                             defaultValue="4 Seats">
                                             <option>2 Seats</option>
                                             <option>4 Seats</option>
