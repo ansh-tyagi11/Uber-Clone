@@ -1,12 +1,14 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const userNavbar = () => {
     const pathname = usePathname();
     const isActive = (path) => pathname === path;
+    const [isOpen, setIsOpen] = useState(false);
 
+    const toggleSidebar = () => setIsOpen(!isOpen);
     return (
         <>
             {/* Top Navigation */}
@@ -33,17 +35,46 @@ const userNavbar = () => {
                             Profile
                         </Link>
                     </nav>
-                    <div className="flex items-center gap-3">
-                        <button className="flex items-center justify-center w-11 h-11 bg-white/90 backdrop-blur rounded-full text-slate-700 hover:bg-white hover:text-[#2b9dee] shadow-sm transition-all">
-                            <span className="material-symbols-outlined">notifications</span>
-                        </button>
-                        <div
-                            className="w-11 h-11 rounded-full bg-cover bg-center border-2 border-white shadow-sm cursor-pointer"
-                            style={{
-                                backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBnWnXhqt2gJ1xjCWWALJmhPrDL_NhFbZ8lhBrwuOhzPnwJzg9Fsllee_IriCz6reqTw3czUCYd7XfsqQjcC6QR9zMNeMjEtdQ9WZqqSfuc38YTETwTw9a0i6qioDrwBmC03OgPP6snFDmmxB8lFu_5chKZT98nY__47e5GhAk--SX1EWd5Lhkqn_RDQaqFQjEi5D_uL48qu3PdZPuZWzgBgyHMKP3133XGmsRO_XXY7Zh_zwL5OZaTc5-msl0MxgBRb65QNZPA-UHT')"
-                            }}
-                        />
-                    </div>
+                    <span className='md:block hidden'>
+                        <div className="flex items-center gap-3">
+                            <button className="flex items-center justify-center w-11 h-11 bg-white/90 backdrop-blur rounded-full text-slate-700 hover:bg-white hover:text-[#2b9dee] shadow-sm transition-all">
+                                <span className="material-symbols-outlined">notifications</span>
+                            </button>
+                            <div
+                                className="w-11 h-11 rounded-full bg-cover bg-center border-2 border-white shadow-sm cursor-pointer"
+                                style={{
+                                    backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBnWnXhqt2gJ1xjCWWALJmhPrDL_NhFbZ8lhBrwuOhzPnwJzg9Fsllee_IriCz6reqTw3czUCYd7XfsqQjcC6QR9zMNeMjEtdQ9WZqqSfuc38YTETwTw9a0i6qioDrwBmC03OgPP6snFDmmxB8lFu_5chKZT98nY__47e5GhAk--SX1EWd5Lhkqn_RDQaqFQjEi5D_uL48qu3PdZPuZWzgBgyHMKP3133XGmsRO_XXY7Zh_zwL5OZaTc5-msl0MxgBRb65QNZPA-UHT')"
+                                }}
+                            />
+                        </div>
+                    </span>
+                </div>
+                <div className='md:hidden block pointer-events-auto'>
+                    <span onClick={toggleSidebar} className="fixed top-5 right-8 material-symbols-outlined cursor-pointer z-60"><img
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnWnXhqt2gJ1xjCWWALJmhPrDL_NhFbZ8lhBrwuOhzPnwJzg9Fsllee_IriCz6reqTw3czUCYd7XfsqQjcC6QR9zMNeMjEtdQ9WZqqSfuc38YTETwTw9a0i6qioDrwBmC03OgPP6snFDmmxB8lFu_5chKZT98nY__47e5GhAk--SX1EWd5Lhkqn_RDQaqFQjEi5D_uL48qu3PdZPuZWzgBgyHMKP3133XGmsRO_XXY7Zh_zwL5OZaTc5-msl0MxgBRb65QNZPA-UHT"
+                        alt="Menu"
+                        className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
+                    /></span>
+                    {isOpen && (<div className="h-screen fixed inset-0 bg-black/50 z-40" onClick={toggleSidebar} />)}
+                    <aside className={`fixed top-0 right-0 h-screen justify-between w-64 flex bg-white flex-col shadow-xl pt-14 p-6 z-50 transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"}`}>
+                        <nav className="flex flex-col gap-3 pt-10">
+                            <Link onClick={toggleSidebar} className={`px-5 py-2 text-sm  ${isActive('/user-home') ? 'font-semibold text-slate-800 bg-white rounded-full shadow-sm' : 'font-medium text-slate-600 hover:text-[#2b9dee] transition-colors'}`}
+                                href="/user-home">
+                                Home
+                            </Link>
+                            <Link onClick={toggleSidebar} className={`px-5 py-2 text-sm  ${isActive('/user-rides') ? 'font-semibold text-slate-800 bg-white rounded-full shadow-sm' : 'font-medium text-slate-600 hover:text-[#2b9dee] transition-colors'}`} href="/user-rides">
+                                Rides
+                            </Link>
+                            <Link onClick={toggleSidebar} className={`px-5 py-2 text-sm  ${isActive('/user-payment') ? 'font-semibold text-slate-800 bg-white rounded-full shadow-sm' : 'font-medium text-slate-600 hover:text-[#2b9dee] transition-colors'}`} href="/user-payment">
+                                Payment
+                            </Link>
+                            <Link onClick={toggleSidebar} className={`px-5 py-2 text-sm  ${isActive('/user-profile') ? 'font-semibold text-slate-800 bg-white rounded-full shadow-sm' : 'font-medium text-slate-600 hover:text-[#2b9dee] transition-colors'}`} href="/user-profile">
+                                Profile
+                            </Link>
+                        </nav>
+                        <button className="px-5 py-2 text-sm font-semibold border-slate-800 text-slate-800 bg-white rounded-full shadow-sm">
+                            Log Out</button>
+                    </aside>
                 </div>
             </header>
         </>
