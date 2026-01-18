@@ -1,6 +1,25 @@
+"use client";
 import React from "react";
+import { useForm, Watch } from "react-hook-form";
 
 export default function UserProfileSettings() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors, isSubmitting }
+  } = useForm();
+
+  const password = watch("currentPassword")
+
+  const onSubmit = async (data) => {
+    console.log("Submitting...", data)
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    console.log("Done")
+    reset()
+  }
+
 
   return (
     <>
@@ -27,7 +46,7 @@ export default function UserProfileSettings() {
                       <span className="material-symbols-outlined text-[#137fec] text-2xl">manage_accounts</span>
                     </div>
                   </div>
-                  <form action="#" className="flex flex-col gap-8">
+                  <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
                     {/* Personal Info Section */}
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                       <div className="col-span-1 md:col-span-2">
@@ -38,7 +57,6 @@ export default function UserProfileSettings() {
                           </div>
                           <input
                             className="block w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white py-2.5 pl-10 focus:border-[#137fec] focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-sm shadow-sm transition-shadow"
-                            id="full-name"
                             name="full-name"
                             type="text"
                             value="John Doe"
@@ -54,7 +72,6 @@ export default function UserProfileSettings() {
                           </div>
                           <input
                             className="block w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white py-2.5 pl-10 focus:border-[#137fec] focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-sm shadow-sm transition-shadow"
-                            id="email"
                             name="email"
                             type="email"
                             value="john.doe@example.com"
@@ -70,12 +87,15 @@ export default function UserProfileSettings() {
                           </div>
                           <input
                             className="block w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white py-2.5 pl-10 focus:border-[#137fec] focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-sm shadow-sm transition-shadow"
-                            id="phone"
+                            placeholder="Phone Number"
                             name="phone"
                             type="tel"
-                            value="+91 999999999"
-                            readOnly
+                            autoComplete="tel"
+                            {...register("tel", {
+                              required: { value: true, message: "This field is required." }, pattern: { value: /^\d{10}$/, message: "Phone Number must be exactly 10 digits and only numbers." }
+                            })}
                           />
+                          {errors.tel && <div className="text-xs text-red-500 dark:text-red-500">{errors.tel.message}</div>}
                         </div>
                       </div>
                     </div>
@@ -88,20 +108,45 @@ export default function UserProfileSettings() {
                           <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Current Password</label>
                           <input
                             className="block w-full rounded-xl border border-slate-300 pl-3 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white py-2.5 focus:border-[#137fec] focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-sm shadow-sm"
-                            id="current-password"
-                            name="current-password"
-                            placeholder="••••••••"
+                            name="currentPassword"
+                            placeholder="Current Password"
                             type="password"
+                            {...register("currentPassword", {
+                              required: "This field is required.",
+                              minLength: {
+                                value: 8,
+                                message: "Password must be at least 8 characters",
+                              },
+                              pattern: {
+                                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/,
+                                message: "Password must contain A-Z, a-z, number, symbol & no spaces.",
+                              },
+                            })}
                           />
+                          {errors.currentPassword && <div className="text-xs text-red-500 dark:text-red-500">{errors.currentPassword.message}</div>}
                         </div>
                         <div>
                           <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">New Password</label>
                           <input
                             className="block w-full pl-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white py-2.5 focus:border-[#137fec] focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-sm shadow-sm"
-                            id="new-password"
-                            name="new-password"
+                            name="newPassword"
                             type="password"
+                            autoComplete="password"
+                            placeholder="New Password"
+                            {...register("newPassword", {
+                              required: "This field is required.", validate: value =>
+                                value !== password || "New password must be different from current password.",
+                              minLength: {
+                                value: 8,
+                                message: "Password must be at least 8 characters",
+                              },
+                              pattern: {
+                                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/,
+                                message: "Password must contain A-Z, a-z, number, symbol & no spaces.",
+                              },
+                            })}
                           />
+                          {errors.newPassword && <div className="text-xs text-red-500 dark:text-red-500">{errors.newPassword.message}</div>}
                         </div>
                       </div>
                     </div>
@@ -172,8 +217,8 @@ export default function UserProfileSettings() {
                     <div className="flex items-center justify-end gap-4 pt-4">
                       <button className="px-5 py-2.5 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                         type="button">Cancel</button>
-                      <button className="px-6 py-2.5 rounded-xl bg-[#137fec] hover:bg-blue-600 text-white text-sm font-bold shadow-md shadow-blue-500/30 transition-all hover:-translate-y-0.5"
-                        type="submit">Save Changes</button>
+                      <button disabled={isSubmitting} className={`mt-2 flex items-center justify-center overflow-hidden h-12 hover:bg-[#256af4]/90 leading-normal tracking-[0.015em] duration-200 px-6 py-2.5 rounded-xl bg-[#137fec] text-white text-sm font-bold shadow-md shadow-blue-500/30 transition-all hover:-translate-y-0.5" ${isSubmitting ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
+                        type="submit" value="submit">Save Changes</button>
                     </div>
                   </form>
                 </div>
