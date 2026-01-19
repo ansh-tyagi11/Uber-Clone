@@ -1,6 +1,35 @@
-import React from 'react';
+"use client";
+import React, { use } from 'react';
+import { useForm } from 'react-hook-form';
 
 const page = () => {
+    const {
+        register,
+        handleSubmit,
+        watch,
+        reset,
+        formState: { errors, isSubmitting }
+    } = useForm();
+
+    const formatPlate = (value) => {
+        if (!value) return "";
+
+        value = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        let result = "";
+        if (value.length > 0) result += value.substring(0, 2);
+        if (value.length >= 3) result += "-" + value.substring(2, 4);
+        if (value.length >= 5) result += "-" + value.substring(4, 6);
+        if (value.length >= 7) result += "-" + value.substring(6, 10);
+        return result;
+    };
+
+    const onSubmit = async (data) => {
+        console.log("Submitting...", data)
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+        console.log("Done")
+        reset()
+    }
+
     return (
         <>
             <div className="bg-[#f7f7f8] pt-20 dark:bg-[#17191c] min-h-screen text-[#101519] dark:text-gray-100">
@@ -41,7 +70,7 @@ const page = () => {
                         </div>
                     </div>
                     {/* Two Column Layout for Forms */}
-                    <div className="grid grid-cols-1 gap-8">
+                    <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-8">
                         {/* Section 1: Personal Information */}
                         <section className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-[#e9edf1] dark:border-gray-800 overflow-hidden">
                             <div className="px-6 py-4 border-b border-[#e9edf1] dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
@@ -71,10 +100,15 @@ const page = () => {
                                         <span className="text-sm font-semibold text-[#57758e] dark:text-gray-400">Phone Number</span>
                                         <input
                                             className="rounded-lg border border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3"
+                                            placeholder="Phone Number"
+                                            name="phone"
                                             type="tel"
-                                            value="+91 9999999999"
-                                            readOnly
+                                            autoComplete="tel"
+                                            {...register("tel", {
+                                                required: { value: true, message: "This field is required." }, pattern: { value: /^\d{10}$/, message: "Phone Number must be exactly 10 digits and only numbers." }
+                                            })}
                                         />
+                                        {errors.tel && <div className="text-xs text-red-500 dark:text-red-500">{errors.tel.message}</div>}
                                     </label>
                                     <label className="flex flex-col gap-2">
                                         <span className="text-sm font-semibold text-[#57758e] dark:text-gray-400">
@@ -83,9 +117,13 @@ const page = () => {
                                         <input
                                             className="rounded-lg border border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3"
                                             type="text"
-                                            value="Address"
-                                            readOnly
+                                            placeholder="Residential Address"
+                                            name="address"
+                                            {...register("address", {
+                                                required: { value: true, message: "This field is required." }
+                                            })}
                                         />
+                                        {errors.address && <div className="text-xs text-red-500 dark:text-red-500">{errors.address.message}</div>}
                                     </label>
                                 </div>
                             </div>
@@ -101,13 +139,14 @@ const page = () => {
                             <div className="p-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <label className="flex flex-col gap-2">
-                                        <span className="text-sm font-semibold text-[#57758e] dark:text-gray-400">Vehicle Model</span>
+                                        <span className="text-sm font-semibold text-[#57758e] dark:text-gray-400">Vehicle Model and Year</span>
                                         <div className="relative">
                                             <input
                                                 className="w-full rounded-lg border border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3 pr-10"
                                                 type="text"
-                                                value="Toyota Camry (2023)"
-                                                readOnly
+                                                name="vehicleModel"
+                                                placeholder="Vehicle Model and Year"
+                                                {...register("vehicleModel", { required: true, message: "This field is required." })}
                                             />
                                             <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400">directions_car</span>
                                         </div>
@@ -119,9 +158,21 @@ const page = () => {
                                         <input
                                             className="w-full rounded-lg border border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3 pr-10 font-mono uppercase"
                                             type="text"
-                                            value="CAL-778-99"
-                                            readOnly
+                                            placeholder="License Plate Number"
+                                            name="licencePlateNumber"
+                                            {...register("licencePlateNumber", {
+                                                required: {
+                                                    value: true, message: "This field is required."
+                                                }, validate: (v) =>
+                                                    /^[A-Z]{2}-\d{2}-[A-Z]{2}-\d{4}$/.test(v) ||
+                                                    "Format must be DL-01-AB-1234",
+                                            })}
+                                            onChange={(e) => {
+                                                e.target.value = formatPlate(e.target.value);
+                                            }}
+                                            maxLength={13}
                                         />
+                                        {errors.licencePlateNumber && (<p className="text-red-500 text-sm mt-1">{errors.licencePlateNumber.message}</p>)}
                                     </label>
                                     <label className="flex flex-col gap-2">
                                         <span className="text-sm font-semibold text-[#57758e] dark:text-gray-400">Vehicle Color</span>
@@ -130,9 +181,11 @@ const page = () => {
                                             <input
                                                 className="w-full rounded-lg border border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3 pr-10"
                                                 type="text"
-                                                value="Midnight Silver"
-                                                readOnly
+                                                placeholder="Vehicle Color"
+                                                name="vehicleColor"
+                                                {...register("vehicleColor", { required: true, message: "This field is required." })}
                                             />
+                                            {errors.vehicleColor && (<p className="text-red-500 text-sm mt-1">{errors.vehicleColor.message}</p>)}
                                         </div>
                                     </label>
                                     <label className="flex flex-col gap-2">
@@ -214,19 +267,18 @@ const page = () => {
                                 </div>
                             </div>
                         </section>
-                        {/* Bottom Actions */}
-                        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 pb-12">
-                            <p className="text-sm text-[#57758e] max-w-sm text-center md:text-left">
-                                Your updates will be reviewed by the admin team before they reflect on your public profile.
-                            </p>
-                            <div className="flex items-center gap-4 w-full md:w-auto">
-                                <button className="flex-1 md:flex-none px-8 py-3 rounded-lg text-sm font-bold text-[#101519] dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                                    Discard Changes
-                                </button>
-                                <button className="flex-1 md:flex-none px-12 py-3 rounded-lg bg-[#1c486e] text-white text-sm font-bold shadow-lg shadow-[#1c486e]/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                                    Save Changes
-                                </button>
-                            </div>
+                    </form>
+                    {/* Bottom Actions */}
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 pb-12">
+                        <p className="text-sm text-[#57758e] max-w-sm text-center md:text-left">
+                            Your updates will be reviewed by the admin team before they reflect on your public profile.
+                        </p>
+                        <div className="flex items-center gap-4 w-full md:w-auto">
+                            <button className="flex-1 md:flex-none px-8 py-3 rounded-lg text-sm font-bold text-[#101519] dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                                Discard Changes
+                            </button>
+                            <button disabled={isSubmitting} className={`mt-2 flex items-center justify-center overflow-hidden h-12 hover:bg-[#256af4]/90 leading-normal tracking-[0.015em] duration-200 px-6 py-2.5 rounded-xl bg-[#137fec] text-white text-sm font-bold shadow-md shadow-blue-500/30 transition-all hover:-translate-y-0.5" ${isSubmitting ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
+                                type="submit" value="submit">Save Changes</button>
                         </div>
                     </div>
                 </main>
