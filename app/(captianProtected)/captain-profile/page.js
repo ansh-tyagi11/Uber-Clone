@@ -1,5 +1,5 @@
 "use client";
-import React, { use } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 const page = () => {
@@ -148,6 +148,7 @@ const page = () => {
                                                 placeholder="Vehicle Model and Year"
                                                 {...register("vehicleModel", { required: true, message: "This field is required." })}
                                             />
+                                            {errors.vehicleModel && <div className="text-xs text-red-500 dark:text-red-500">{errors.vehicleModel.message}</div>}
                                             <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400">directions_car</span>
                                         </div>
                                     </label>
@@ -172,7 +173,7 @@ const page = () => {
                                             }}
                                             maxLength={13}
                                         />
-                                        {errors.licencePlateNumber && (<p className="text-red-500 text-sm mt-1">{errors.licencePlateNumber.message}</p>)}
+                                        {errors.licencePlateNumber && (<p className="text-xs text-red-500 dark:text-red-500">{errors.licencePlateNumber.message}</p>)}
                                     </label>
                                     <label className="flex flex-col gap-2">
                                         <span className="text-sm font-semibold text-[#57758e] dark:text-gray-400">Vehicle Color</span>
@@ -194,10 +195,11 @@ const page = () => {
                                         </span>
                                         <select
                                             className="w-full rounded-lg border border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3 pr-10"
-                                            defaultValue="4 Seats">
-                                            <option>2 Seats</option>
-                                            <option>4 Seats</option>
-                                            <option>6 Seats (XL)</option>
+                                            {...register("seatingCapacity")}
+                                        >
+                                            <option value="2">2 Seats</option>
+                                            <option value="4">4 Seats</option>
+                                            <option value="6">6 Seats (XL)</option>
                                         </select>
                                     </label>
                                 </div>
@@ -267,20 +269,20 @@ const page = () => {
                                 </div>
                             </div>
                         </section>
-                    </form>
-                    {/* Bottom Actions */}
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 pb-12">
-                        <p className="text-sm text-[#57758e] max-w-sm text-center md:text-left">
-                            Your updates will be reviewed by the admin team before they reflect on your public profile.
-                        </p>
-                        <div className="flex items-center gap-4 w-full md:w-auto">
-                            <button className="flex-1 md:flex-none px-8 py-3 rounded-lg text-sm font-bold text-[#101519] dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                                Discard Changes
-                            </button>
-                            <button disabled={isSubmitting} className={`mt-2 flex items-center justify-center overflow-hidden h-12 hover:bg-[#256af4]/90 leading-normal tracking-[0.015em] duration-200 px-6 py-2.5 rounded-xl bg-[#137fec] text-white text-sm font-bold shadow-md shadow-blue-500/30 transition-all hover:-translate-y-0.5" ${isSubmitting ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
-                                type="submit" value="submit">Save Changes</button>
+                        {/* Bottom Actions */}
+                        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 pb-12">
+                            <p className="text-sm text-[#57758e] max-w-sm text-center md:text-left">
+                                Your updates will be reviewed by the admin team before they reflect on your public profile.
+                            </p>
+                            <div className="flex items-center gap-4 w-full md:w-auto">
+                                <button className="flex-1 md:flex-none px-8 py-3 rounded-lg text-sm font-bold text-[#101519] dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                                    Discard Changes
+                                </button>
+                                <button disabled={isSubmitting} className={`mt-2 flex items-center justify-center overflow-hidden h-12 hover:bg-[#256af4]/90 leading-normal tracking-[0.015em] duration-200 px-6 py-2.5 rounded-xl bg-[#137fec] text-white text-sm font-bold shadow-md shadow-blue-500/30 transition-all hover:-translate-y-0.5" ${isSubmitting ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
+                                    type="submit" value="submit">Save Changes</button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </main>
 
             </div>
