@@ -220,3 +220,18 @@ export async function forContact(form) {
 
     return { success: true, message: "Thank you for contacting us! Your message has been sent successfully. We will get back to you soon." }
 }
+
+export async function forUpdateProfileUser(email, data) {
+    await connectDB();
+
+    const { tel, currentPassword, newPassword } = data;
+    
+    let user = await User.findOne({ email });
+    if (!user) return { success: false, message: "User not found." };
+
+    await User.updateOne(
+        { email },
+        { $set: { phone: tel } }
+    )
+    return { success: true, message: "Profile updated successfully." };
+}

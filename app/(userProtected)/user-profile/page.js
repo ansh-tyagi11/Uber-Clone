@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import { useForm, Watch } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { forUpdateProfileUser } from "../../../actions/useractions.js";
 
 export default function UserProfileSettings() {
   const {
@@ -14,9 +15,8 @@ export default function UserProfileSettings() {
   const password = watch("currentPassword")
 
   const onSubmit = async (data) => {
-    console.log("Submitting...", data)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    console.log("Done")
+    let res = await forUpdateProfileUser(email, data);
+    console.log(res);
     reset()
   }
 
