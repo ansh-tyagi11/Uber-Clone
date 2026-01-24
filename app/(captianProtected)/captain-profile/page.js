@@ -1,6 +1,8 @@
 "use client";
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { forUpdateCaptainProfile } from '@/actions/useractions';
+import { toast } from 'react-toastify';
 
 const page = () => {
     const {
@@ -10,6 +12,9 @@ const page = () => {
         reset,
         formState: { errors, isSubmitting }
     } = useForm();
+
+    const currentPassword = watch("currentPassword");
+    const newPassword = watch("newPassword");
 
     const formatPlate = (value) => {
         if (!value) return "";
@@ -24,10 +29,15 @@ const page = () => {
     };
 
     const onSubmit = async (data) => {
-        console.log("Submitting...", data)
-        await new Promise((resolve) => setTimeout(resolve, 2000))
-        console.log("Done")
-        reset()
+        if (Object.values(data).every(value => value === "")) return toast.error("Please fill at least one field to update.");
+
+        let res = await forUpdateCaptainProfile("at9773@srmist.edu.in", data);
+        if (res.success) {
+            toast.success(res.message || "Profile updated successfully.");
+        } else {
+            toast.error(res.error || res.message || "Failed to update profile.");
+        }
+        reset();
     }
 
     return (
@@ -105,7 +115,7 @@ const page = () => {
                                             type="tel"
                                             autoComplete="tel"
                                             {...register("tel", {
-                                                required: { value: true, message: "This field is required." }, pattern: { value: /^\d{10}$/, message: "Phone Number must be exactly 10 digits and only numbers." }
+                                                required: { pattern: { value: /^\d{10}$/, message: "Phone Number must be exactly 10 digits and only numbers." } },
                                             })}
                                         />
                                         {errors.tel && <div className="text-xs text-red-500 dark:text-red-500">{errors.tel.message}</div>}
@@ -119,9 +129,7 @@ const page = () => {
                                             type="text"
                                             placeholder="Residential Address"
                                             name="address"
-                                            {...register("address", {
-                                                required: { value: true, message: "This field is required." }
-                                            })}
+                                            {...register("address")}
                                         />
                                         {errors.address && <div className="text-xs text-red-500 dark:text-red-500">{errors.address.message}</div>}
                                     </label>
@@ -146,7 +154,7 @@ const page = () => {
                                                 type="text"
                                                 name="vehicleModel"
                                                 placeholder="Vehicle Model and Year"
-                                                {...register("vehicleModel", { required: true, message: "This field is required." })}
+                                                {...register("vehicleModel")}
                                             />
                                             {errors.vehicleModel && <div className="text-xs text-red-500 dark:text-red-500">{errors.vehicleModel.message}</div>}
                                             <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400">directions_car</span>
@@ -163,10 +171,10 @@ const page = () => {
                                             name="licencePlateNumber"
                                             {...register("licencePlateNumber", {
                                                 required: {
-                                                    value: true, message: "This field is required."
-                                                }, validate: (v) =>
-                                                    /^[A-Z]{2}-\d{2}-[A-Z]{2}-\d{4}$/.test(v) ||
-                                                    "Format must be DL-01-AB-1234",
+                                                    validate: (v) =>
+                                                        /^[A-Z]{2}-\d{2}-[A-Z]{2}-\d{4}$/.test(v) ||
+                                                        "Format must be DL-01-AB-1234",
+                                                }
                                             })}
                                             onChange={(e) => {
                                                 e.target.value = formatPlate(e.target.value);
@@ -184,7 +192,7 @@ const page = () => {
                                                 type="text"
                                                 placeholder="Vehicle Color"
                                                 name="vehicleColor"
-                                                {...register("vehicleColor", { required: true, message: "This field is required." })}
+                                                {...register("vehicleColor")}
                                             />
                                             {errors.vehicleColor && (<p className="text-red-500 text-sm mt-1">{errors.vehicleColor.message}</p>)}
                                         </div>
@@ -201,6 +209,76 @@ const page = () => {
                                             <option value="4">4 Seats</option>
                                             <option value="6">6 Seats (XL)</option>
                                         </select>
+                                    </label>
+                                </div>
+                            </div>
+                        </section>
+                        {/* Section 2: Security */}
+                        <section className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-[#e9edf1] dark:border-gray-800 overflow-hidden">
+                            <div className="px-6 py-4 border-b border-[#e9edf1] dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50 flex items-center justify-between">
+                                <h3 className="text-lg font-bold">Security</h3>
+                            </div>
+                            <div className="p-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <label className="flex flex-col gap-2">
+                                        <span className="text-sm font-semibold text-[#57758e] dark:text-gray-400">Current Password</span>
+                                        <div className="relative">
+                                            <input
+                                                className="w-full rounded-lg border border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3 pr-10"
+                                                name="currentPassword"
+                                                placeholder="Current Password"
+                                                type="password"
+                                                {...register("currentPassword", {
+                                                    validate: value => {
+                                                        if (newPassword && !value) {
+                                                            return "Current password is required to set a new password";
+                                                        }
+                                                        return true;
+                                                    },
+                                                    minLength: {
+                                                        value: 8,
+                                                        message: "Password must be at least 8 characters",
+                                                    },
+                                                    pattern: {
+                                                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/,
+                                                        message: "Password must contain A-Z, a-z, number, symbol & no spaces.",
+                                                    },
+                                                })}
+                                            />
+                                            {errors.currentPassword && <div className="text-xs text-red-500 dark:text-red-500">{errors.currentPassword.message}</div>}
+                                        </div>
+                                    </label>
+                                    <label className="flex flex-col gap-2">
+                                        <span className="text-sm font-semibold text-[#57758e] dark:text-gray-400">
+                                            New Password
+                                        </span>
+                                        <input
+                                            className="w-full rounded-lg border border-[#d3dce4] dark:border-gray-700 dark:bg-gray-800 focus:ring-[#1c486e] focus:border-[#1c486e] px-4 py-3 pr-10 font-mono"
+                                            name="newPassword"
+                                            type="password"
+                                            autoComplete="password"
+                                            placeholder="New Password"
+                                            {...register("newPassword", {
+                                                validate: value => {
+                                                    if (currentPassword && !value) {
+                                                        return "New password is required";
+                                                    }
+                                                    if (value && value === currentPassword) {
+                                                        return "New password must be different from current password";
+                                                    }
+                                                    return true;
+                                                },
+                                                minLength: {
+                                                    value: 8,
+                                                    message: "Password must be at least 8 characters",
+                                                },
+                                                pattern: {
+                                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/,
+                                                    message: "Password must contain A-Z, a-z, number, symbol & no spaces.",
+                                                },
+                                            })}
+                                        />
+                                        {errors.newPassword && <div className="text-xs text-red-500 dark:text-red-500">{errors.newPassword.message}</div>}
                                     </label>
                                 </div>
                             </div>

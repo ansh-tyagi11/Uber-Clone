@@ -221,11 +221,11 @@ export async function forContact(form) {
     return { success: true, message: "Thank you for contacting us! Your message has been sent successfully. We will get back to you soon." }
 }
 
-export async function forUpdateProfileUser(email, data) {
+export async function forUpdateUserProfile(email, data) {
     await connectDB();
 
     const { tel, currentPassword, newPassword } = data;
-    
+
     let user = await User.findOne({ email });
     if (!user) return { success: false, message: "User not found." };
 
@@ -233,5 +233,69 @@ export async function forUpdateProfileUser(email, data) {
         { email },
         { $set: { phone: tel } }
     )
+
+    if (newPassword) {
+        let storedPasswordHash = user.signUp?.password;
+
+        if (!storedPasswordHash) return { success: false, error: "User has no password. Please use social login or reset password." };
+
+        let isCurrentPasswordValid = await verifyPassword(storedPasswordHash, currentPassword);
+
+        if (!isCurrentPasswordValid) return { success: false, error: "Incorrect current password." };
+
+        const newHashedPassword = await hashedPassword(newPassword);
+
+        await User.updateOne(
+            { email },
+            { $set: { "signUp.password": newHashedPassword } }
+        )
+    }
+
     return { success: true, message: "Profile updated successfully." };
+}
+
+export async function forUpdateCaptainProfile(email, data) {
+    await connectDB();
+
+    const { tel, address, vehicleModel, licencePlateNumber, vehicleColor, seatingCapacity, currentPassword, newPassword } = data;
+    console.log(data)
+    let user = await User.findOne({ email });
+    if (!user) return { success: false, message: "User not found." };
+
+    const updateFields = {
+        role: 'captain',
+    }
+
+    if (tel) updateFields.phone = tel;
+    if (address) updateFields.address = address;
+    if (licencePlateNumber) updateFields['captain.licenceNumber'] = licencePlateNumber;
+    if (vehicleModel) updateFields['captain.vehicle.model'] = vehicleModel;
+    if (vehicleColor) updateFields['captain.vehicle.vehicleColor'] = vehicleColor;
+    if (seatingCapacity) updateFields['captain.vehicle.seatingCapacity'] = seatingCapacity;
+
+    if (Object.keys(updateFields).length > 1) {
+        await User.updateOne(
+            { email },
+            { $set: updateFields }
+        );
+    }
+
+    if (newPassword) {
+        let storedPasswordHash = user.signUp?.password;
+
+        if (!storedPasswordHash) return { success: false, error: "User has no password. Please use social login or reset password." };
+
+        let isCurrentPasswordValid = await verifyPassword(storedPasswordHash, currentPassword);
+
+        if (!isCurrentPasswordValid) return { success: false, error: "Incorrect current password." };
+
+        const newHashedPassword = await hashedPassword(newPassword);
+
+        await User.updateOne(
+            { email },
+            { $set: { "signUp.password": newHashedPassword } }
+        )
+    }
+
+    return { success: true, message: "Captain profile updated successfully." };
 }

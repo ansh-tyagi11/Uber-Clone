@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { forUpdateProfileUser } from "../../../actions/useractions.js";
+import { forUpdateUserProfile } from "../../../actions/useractions.js";
+import { toast } from "react-toastify";
 
 export default function UserProfileSettings() {
   const {
@@ -12,11 +13,16 @@ export default function UserProfileSettings() {
     formState: { errors, isSubmitting }
   } = useForm();
 
-  const password = watch("currentPassword")
+  const currentPassword = watch("currentPassword");
+  const newPassword = watch("newPassword");
 
   const onSubmit = async (data) => {
-    let res = await forUpdateProfileUser(email, data);
-    console.log(res);
+    let res = await forUpdateUserProfile("at9773@srmist.edu.in", data);
+    if (res.success) {
+      toast.success("Profile updated successfully!");
+    } else {
+      toast.error(res.error || "An error occurred while updating the profile.");
+    }
     reset()
   }
 
@@ -92,7 +98,7 @@ export default function UserProfileSettings() {
                             type="tel"
                             autoComplete="tel"
                             {...register("tel", {
-                              required: { value: true, message: "This field is required." }, pattern: { value: /^\d{10}$/, message: "Phone Number must be exactly 10 digits and only numbers." }
+                              pattern: { value: /^\d{10}$/, message: "Phone Number must be exactly 10 digits and only numbers." }
                             })}
                           />
                           {errors.tel && <div className="text-xs text-red-500 dark:text-red-500">{errors.tel.message}</div>}
@@ -112,7 +118,12 @@ export default function UserProfileSettings() {
                             placeholder="Current Password"
                             type="password"
                             {...register("currentPassword", {
-                              required: "This field is required.",
+                              validate: value => {
+                                if (newPassword && !value) {
+                                  return "Current password is required to set a new password";
+                                }
+                                return true;
+                              },
                               minLength: {
                                 value: 8,
                                 message: "Password must be at least 8 characters",
@@ -134,8 +145,15 @@ export default function UserProfileSettings() {
                             autoComplete="password"
                             placeholder="New Password"
                             {...register("newPassword", {
-                              required: "This field is required.", validate: value =>
-                                value !== password || "New password must be different from current password.",
+                              validate: value => {
+                                if (currentPassword && !value) {
+                                  return "New password is required";
+                                }
+                                if (value && value === currentPassword) {
+                                  return "New password must be different from current password";
+                                }
+                                return true;
+                              },
                               minLength: {
                                 value: 8,
                                 message: "Password must be at least 8 characters",

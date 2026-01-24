@@ -18,9 +18,9 @@ const UserSchema = new Schema({
         isVerified: { type: Boolean, default: false },
         licenceNumber: { type: String, },
         vehicle: {
-            type: String,
+            vehicleColor: String,
             model: String,
-            plateNumber: String,
+            seatingCapacity: Number,
         },
         rating: { type: Number, default: 0 },
         totalRides: { type: Number, default: 0 }
