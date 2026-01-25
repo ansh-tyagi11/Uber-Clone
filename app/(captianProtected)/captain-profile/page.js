@@ -1,7 +1,6 @@
 "use client";
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { forUpdateCaptainProfile } from '@/actions/useractions';
 import { toast } from 'react-toastify';
 
 const page = () => {
@@ -30,9 +29,12 @@ const page = () => {
 
     const onSubmit = async (data) => {
         if (Object.values(data).every(value => value === "")) return toast.error("Please fill at least one field to update.");
-
-        let res = await forUpdateCaptainProfile("at9773@srmist.edu.in", data);
-        if (res.success) {
+        let res = await fetch("/api/captainProfileUpdate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: "at9773@srmist.edu.in", data })
+        });
+        if (res.ok) {
             toast.success(res.message || "Profile updated successfully.");
         } else {
             toast.error(res.error || res.message || "Failed to update profile.");

@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { forUpdateUserProfile } from "../../../actions/useractions.js";
 import { toast } from "react-toastify";
 
 export default function UserProfileSettings() {
@@ -17,8 +16,12 @@ export default function UserProfileSettings() {
   const newPassword = watch("newPassword");
 
   const onSubmit = async (data) => {
-    let res = await forUpdateUserProfile("at9773@srmist.edu.in", data);
-    if (res.success) {
+    let res = await fetch("/api/userProfileUpdate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "at9773@srmist.edu.in", data })
+    });
+    if (res.ok) {
       toast.success("Profile updated successfully!");
     } else {
       toast.error(res.error || "An error occurred while updating the profile.");
