@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function CaptainSearchingPage() {
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden">
+    <div className="relative flex h-screen w-full flex-col overflow-x-auto">
       {/* Main Content Wrapper */}
       <main className="relative flex grow flex-col items-center justify-center p-4">
         {/* Map Background with Soft Overlay */}

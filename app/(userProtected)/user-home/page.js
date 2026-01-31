@@ -70,7 +70,7 @@ export default function Home() {
             </main>
 
             {/* Floating UI Panel (Left Side) */}
-            <div className="absolute z-40 top-24 left-6 md:left-12 w-full max-w-105 flex flex-col gap-5 h-[calc(100vh-8rem)] pointer-events-none">
+            <div className="absolute z-40 top-24 left-6 md:left-12 w-full lg:max-w-105 max-w-85 flex flex-col gap-5 h-[calc(100vh-8rem)] pointer-events-none">
                 {/* Main Booking Card */}
                 <div className="bg-white rounded-3xl shadow-lg p-6 pointer-events-auto flex flex-col gap-6">
                     {/* Header */}

@@ -1,13 +1,19 @@
-import React from 'react';
-
+"use client";
+import React, { useState } from 'react';
 
 const AssignedCaptainScreen = () => {
+    const [isActive, setIsActive] = useState(false);
+
+    const handleChange = () => {
+        setIsActive(!isActive)
+    }
+
     return (
         <>
-            <div className="font-display bg-[#f6f7f8] dark:bg-[#101a22] text-[#111518] h-screen flex flex-col overflow-hidden">
+            <div className="font-display relative bg-[#f6f7f8] dark:bg-[#101a22] text-[#111518] h-screen flex flex-col overflow-hidden">
                 {/* Main Layout */}
                 <main className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
-                    {/* Right Panel: Map */}
+                    {/* Left Panel: Map */}
                     <div className="flex-1 relative bg-[#e5e7eb] min-h-100">
                         {/* Map Background Image */}
                         <div className="absolute inset-0 w-full h-full bg-cover bg-center"
@@ -51,8 +57,14 @@ const AssignedCaptainScreen = () => {
                             </svg>
                         </div>
                     </div >
-                    {/* Left Panel: Driver & Trip Info */}
-                    <aside className="pt-22 w-full lg:w-120 xl:w-135 bg-white z-10 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.02)] overflow-y-auto h-full lg:h-auto border-r border-[#f0f3f4]" >
+                    {/* Right Panel: Driver & Trip Info */}
+                    <aside className={`lg:max-w-105 absolute md:relative bottom-0 lg:rounded-t-none rounded-t-4xl lg:pt-22 w-full lg:w-120 xl:w-135 bg-white z-10 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.02)] overflow-y-auto md:h-full lg:h-auto border-r border-[#f0f3f4] ${isActive ? 'h-[60%]' : 'h-[25%]'}`}>
+                        {/* Header */}
+                        <div onClick={handleChange} className="block lg:hidden p-6 pb-0 z-30 sticky top-0 bg-white">
+                            <div className="flex items-center justify-center gap-3 mb-6">
+                                <button className="flex items-center justify-center w-20 h-1 rounded-full bg-gray-200 dark:bg-[#101a22] text-[#111518] hover:bg-gray-200 transition-colors"></button>
+                            </div>
+                        </div>
                         {/* Status Header */}
                         <div className="pt-8 px-8 pb-4" >
                             <div className="flex items-center gap-2 mb-2">
@@ -61,14 +73,14 @@ const AssignedCaptainScreen = () => {
                             <h1 className="text-[#111518] text-[32px] font-bold leading-tight tracking-tight">Your driver is on the way! </h1>
                         </div >
 
-                        <div className="px-8 py-2" >
+                        <div className="px-8 py-2 pb-0 md:pb-2" >
                             <div className="flex gap-6 justify-between items-center mb-3">
                                 <p className="text-[#617989] text-2xl font-medium">Estimated arrival</p>
                                 <p className="text-[#2b9dee] text-2xl font-bold leading-normal">4 min</p>
                             </div>
                         </div >
                         {/* Driver Card */}
-                        < div className="px-6 py-6" >
+                        < div className="px-6 md:py-6 py-2" >
                             <div className="bg-[#f6f7f8]/50 border border-[#eff2f5] rounded-4xl p-6 relative overflow-hidden group">
                                 {/* Decorative subtle background blob */}
                                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#eaf5fd] rounded-full opacity-50 blur-2xl">

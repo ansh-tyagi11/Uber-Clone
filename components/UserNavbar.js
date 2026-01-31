@@ -13,7 +13,7 @@ const userNavbar = () => {
     return (
         <>
             {/* Top Navigation */}
-            <header className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5 pointer-events-auto">
+            <header className="md:absolute fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5 pointer-events-auto">
                 <div className="pointer-events-auto flex items-center gap-3 bg-white/80 backdrop-blur-md rounded-full px-5 py-2 shadow-sm border border-white/50">
                     <div className="p-1.5 bg-[#2b9dee] rounded-full text-white">
                         <span className="material-symbols-outlined text-[20px]">local_taxi</span>

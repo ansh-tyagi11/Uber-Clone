@@ -1,9 +1,15 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function DuringRide() {
+  const [isActive, setIsActive] = useState(false)
+
+  const handleChange = () => {
+    setIsActive(!isActive)
+  }
+
   return (
-    <div className="bg-[#f6f7f8] dark:bg-[#101a22] text-[#111518] font-display h-screen w-screen md:overflow-hidden flex  flex-col md:flex-row overflow-x-hidden">
+    <div className="bg-[#f6f7f8] dark:bg-[#101a22] text-[#111518] font-display h-screen w-screen md:overflow-hidden flex relative flex-col md:flex-row overflow-x-hidden">
 
       {/* Left Panel: Map & Floating UI */}
       <main className="flex-1 relative bg-gray-100 md:h-full w-full md:pt-0">
@@ -107,12 +113,11 @@ export default function DuringRide() {
       </main>
 
       {/* Right Panel: Ride Information & Controls */}
-      <aside className="w-full md:w-105 rounded-t-4xl md:rounded-t-none bg-white dark:bg-[#1A2632] h-full flex flex-col shadow-xl relative shrink-0 overflow-y-auto">
+      <aside className={`w-full md:w-105 rounded-t-4xl md:rounded-t-none bg-white dark:bg-[#1A2632] absolute bottom-0 z-20 md:h-full flex flex-col shadow-xl md:relative shrink-0 overflow-y-auto ${isActive ? 'h-[60%]' : 'h-[25%]'}`}>
         {/* Header */}
-        <div className="p-6 pb-2">
+        <div onClick={handleChange} className="p-6 pb-2 z-30 sticky top-0 bg-white">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <button className="flex items-center justify-center w-20 h-1 rounded-full bg-gray-200 dark:bg-[#101a22] text-[#111518] hover:bg-gray-200 transition-colors">
-            </button>
+            <button className="flex items-center justify-center w-20 h-1 rounded-full bg-gray-200 dark:bg-[#101a22] text-[#111518] hover:bg-gray-200 transition-colors"></button>
           </div>
         </div>
 

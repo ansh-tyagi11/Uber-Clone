@@ -11,7 +11,7 @@ const RideSelection = () => {
                 {/* Main Content: Split View */}
                 <div className="flex flex-1 overflow-hidden relative">
                     {/* Left Side: Map */}
-                    <div className="relative w-full lg:w-[65%] h-full bg-gray-100 dark:bg-gray-900 group">
+                    <div className="flex-1 relative w-full lg:w-[65%] h-full bg-gray-100 dark:bg-gray-900 group">
                         <div className="w-full h-full bg-cover bg-center"
                             data-alt="Stylized map of city streets with a route highlighted in blue" data-location="San Francisco"
                             style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuD2WNcjeOBkQGWbDQz26fF_3qQb7ughAU1o6L4FW0O_YIaD_36p53RKtYdDnWPx16F-xPJmo2FMBTs7HR42qth7X9umD8oVdk_8s3Td4ZIzYw4MlqdF_d67OE0MLj9ZTZphh9eTqRji45HI8yqkVkbiHM0qlaD0--Pn4fer-0L6Ny1BQtYhB-ibqSEZxMqBHlw_z6IN8YJB5uuCmzJuUy6B90yons0WS6OLqhaSSWw8Y2CU1QOrUEBkCSQzd9Xhmesxv1ez-xNghUi2")' }}>
@@ -37,7 +37,7 @@ const RideSelection = () => {
                         </div>
                     </div>
                     {/* Right Side: Control Panel / Sidebar */}
-                    <div className="w-full lg:w-[35%] min-w-100 h-full bg-white dark:bg-[#111518] shadow-2xl flex flex-col z-10 pt-20 border-l border-gray-100 dark:border-gray-800">
+                    <div className="lg:max-w-105 w-full lg:w-[35%] min-w-100 h-full bg-white dark:bg-[#111518] shadow-2xl flex flex-col z-10 pt-20 border-l border-gray-100 dark:border-gray-800">
                         <div className="flex-1 overflow-y-auto custom-scrollbar p-6 lg:p-8 flex flex-col gap-6">
                             {/* Location Timeline */}
                             <div className="bg-gray-50 dark:bg-[#192229] p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50">
